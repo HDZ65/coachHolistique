@@ -52,21 +52,21 @@ const NavBar: React.FC = () => {
     }, []);
 
     return (
-        <header onClick={(e: React.MouseEvent) => e.stopPropagation()} className={` bg-background  top-0 flex flex-col items-center justify-center gap-4 w-full px-8  py-6 z-150   ${isScrolled ? ' md:bg-background  z-50 md:backdrop-blur-sm max-md:bg-foreground ' : 'md:bg-background  z-50  bg-foreground '}`}>
-            <nav className='md:flex md:justify-between md:bg-background  items-center w-full max-w-7xl'>
+        <header onClick={(e: React.MouseEvent) => e.stopPropagation()} className={` bg-foreground lg:bg-background  top-0 flex flex-col items-center justify-center gap-4 w-full lg:px-8 py-6 z-150'}`}>
+            <nav className='lg:flex lg:justify-between lg:bg-background  items-center w-full max-w-7xl'>
                 <Link
                     href="/"
-                    className='flex flex-col items-center md:text-first-1000 text-white-1000'>
+                    className='flex flex-col items-center lg:text-first-1000 text-white-1000'>
                     <GiEyeOfHorus
-                        className='fill-primary max-md:fill-primary-foreground'
+                        className='fill-primary max-lg:fill-primary-foreground'
                         size={30}
                     />
                     <h2
-                        className={`max-md:text-primary-foreground text-3xl ${fontMontaga.className}`}>
+                        className={`max-lg:text-primary-foreground text-3xl ${fontMontaga.className}`}>
                         Élisabeth
                     </h2>
                 </Link>
-                <div className='hidden md:flex items-center gap-4'>
+                <div className='hidden lg:flex items-center gap-4'>
                     <ul className=" items-center divide-x text-second-1000">
                         {navLinks.map(link => (
                             <Link key={link.href} href={link.href} className='text-lg xl:px-6 px-4 max-lg:px-3 hover:underline hover:text-primary'>{link.label}</Link>
@@ -87,7 +87,7 @@ const NavBar: React.FC = () => {
                     </Link>
                 </div>
             </nav>
-            <div className='hidden relative w-full max-md:flex flex-col items-center justify-center'>
+            <div className='hidden relative w-full max-lg:flex flex-col items-center justify-center'>
                 <button
                     aria-expanded={isOpen}
                     onClick={toggleNavbar}

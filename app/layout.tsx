@@ -25,13 +25,13 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={cn(
-        "flex flex-col items-center justify-between min-h-[100dvh] w-[100dvw] bg-background font-sans antialiased",
+        "flex flex-col items-center justify-between min-h-[100dvh] overflow-x-hidden max-w-[100dvw] bg-background font-sans antialiased",
         fontSans.variable
       )}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
