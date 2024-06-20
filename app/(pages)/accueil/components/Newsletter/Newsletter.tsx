@@ -49,7 +49,7 @@ export function Newsletter() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" w-2/3 max-md:w-full space-y-6 bg-white rounded-lg p-6 mx-auto shadow-md">
+            <form onSubmit={form.handleSubmit(onSubmit)} className=" w-2/5 max-md:w-full space-y-6 bg-white rounded-lg p-6 mx-auto shadow-md">
             <article className="flex flex-col  gap-4">
                 <h2 className={`text-4xl text-secondary ${fontEphesis.className}`}>NewsLetter</h2>
                 <p className="font-light">Restez informé de nos dernières actualités, offres spéciales et conseils exclusifs. Inscrivez-vous dès maintenant pour ne rien manquer !</p>

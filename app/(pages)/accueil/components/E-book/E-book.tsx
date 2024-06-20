@@ -6,11 +6,6 @@ import ebook from './../../../../assets/anna-demianenko-CPWhnIkL4Lk-unsplash.jpg
 export default function Ebook() {
     return (
         <>
-            <head>
-                <title>E-book - Loi de l&apos;attraction</title>
-                <meta name="description" content="Transformez vos rêves en réalité grâce à notre e-book sur la loi de l&apos;attraction. Découvrez des conseils, des exercices et des outils pour attirer le succès et améliorer votre vie." />
-                <meta name="keywords" content="e-book, loi de l&apos;attraction, développement personnel, succès, vie meilleure" />
-            </head>
             <section className="hidden md:flex gap-24">
                 <article className="flex flex-col gap-6 h-full">
                     <div className="flex gap-2 text-muted-foreground h-full">
