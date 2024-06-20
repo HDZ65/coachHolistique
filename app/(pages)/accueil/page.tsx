@@ -14,7 +14,6 @@ export default function Accueil({ }: Props) {
       <UnPeuDeMoi />
       <Ebook />
       <Newsletter />
-      <Footer />
     </>
   )
 }
