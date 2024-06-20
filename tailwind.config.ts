@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      width: {
+        'short-divider': '25%', // Ajustez cette valeur selon vos besoins
+      },
 
       fontFamily: {
         'sans': ['Inter', ...fontFamily.sans], // Utilisez 'Inter' comme police principale pour 'sans'

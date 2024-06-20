@@ -3,6 +3,7 @@ import { fontMontaga, fontEphesis } from './../../../../fonts';
 
 
 import { CarouselEbook } from "../Carrousel/Caroussel";
+import { IoIosArrowRoundForward } from "react-icons/io";
 export default function FirstEbook() {
   return (
     <div className=" flex  flex-col gap-20 items-center justify-around bg-secondary-25 w-screen py-6 sm:py-14 sm:px-4">
@@ -15,7 +16,12 @@ export default function FirstEbook() {
             <p className="text-xl max-sm:text-md">N&apos;attendez plus, téléchargez dès maintenant mon e-book pour seulement <strong>7.90€</strong> et commencez votre voyage vers le bien-être et l&apos;épanouissement !</p>
           </div>
           <div className="flex  gap-4 mt-4">
-            <Button variant='secondary' >Acheter</Button >
+            <Button className="flex items-center justify-center gap-1 text-2xl">
+              <IoIosArrowRoundForward
+              className="text-2xl mr-1 text-center"
+              />
+              Acheter
+            </Button >
           </div>
         </article>
         <article className="relative max-md:w-full ">

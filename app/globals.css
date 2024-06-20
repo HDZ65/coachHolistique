@@ -4,61 +4,60 @@
 
 @layer base {
   :root {
-    --background: rgb(248, 245, 244);
-    --background-75: rgba(248, 245, 244, 0.75);
-    --background-50: rgba(248, 245, 244, 0.5);
-    --background-25: rgba(248, 245, 244, 0.25);
+    --background: rgb(246, 246, 246);
+    --background-75: rgba(246, 246, 246, 0.75);
+    --background-50: rgba(246, 246, 246, 0.5);
+    --background-25: rgba(246, 246, 246, 0.25);
 
-    --foreground: rgb(172, 113, 113);
-    --foreground-75: rgba(173, 126, 126, 0.75);
-    --foreground-50: rgba(173, 126, 126, 0.5);
-    --foreground-25: rgba(173, 126, 126, 0.25);
+    --foreground: rgb(38, 44, 46);
+    --foreground-75: rgba(38, 44, 46, 0.75);
+    --foreground-50: rgba(38, 44, 46, 0.5);
+    --foreground-25: rgba(38, 44, 46, 0.25);
 
-    --card: rgba(255, 255, 255, 1);
+    --card: rgb(255, 255, 255);
     --card-75: rgba(255, 255, 255, 0.75);
     --card-50: rgba(255, 255, 255, 0.5);
     --card-25: rgba(255, 255, 255, 0.25);
 
-    --card-foreground: rgba(173, 126, 126, 1);
+    --card-foreground: rgba(38, 44, 46, 1);
 
-    --popover: rgba(255, 255, 255, 1);
-    --popover-75: rgba(255, 255, 255, 0.75);
-    --popover-50: rgba(255, 255, 255, 0.5);
-    --popover-25: rgba(255, 255, 255, 0.25);
+    --popover: rgba(246, 246, 246, 1);
+    --popover-75: rgba(246, 246, 246, 0.75);
+    --popover-50: rgba(246, 246, 246, 0.5);
+    --popover-25: rgba(246, 246, 246, 0.25);
 
-    --popover-foreground: rgba(11, 11, 11, 1);
+    --popover-foreground: rgba(38, 44, 46, 1);
 
-    --primary: rgba(238, 151, 136, 1);
-    --primary-75: rgba(238, 151, 136, 0.75);
-    --primary-50: rgba(238, 151, 136, 0.5);
-    --primary-25: rgba(238, 151, 136, 0.25);
+    --primary: rgba(218, 124, 111, 1);
+    --primary-75: rgba(218, 124, 111, 0.75);
+    --primary-50: rgba(218, 124, 111, 0.5);
+    --primary-25: rgba(218, 124, 111, 0.25);
 
-    --primary-foreground: rgba(248, 245, 244, 1);
+    --primary-foreground: rgba(246, 246, 246, 1);
 
+    --secondary: rgb(173, 133, 129);
+    --secondary-75: rgba(173, 133, 129, 0.75);
+    --secondary-50: rgba(173, 133, 129, 0.5);
+    --secondary-25: rgba(173, 133, 129, 0.25);
 
-    --secondary: rgb(243, 183, 176);
-    --secondary-75: rgba(243, 183, 176, 0.75);
-    --secondary-50: rgba(243, 183, 176, 0.5);
-    --secondary-25: rgba(243, 183, 176, 0.25);
+    --secondary-foreground: rgba(246, 246, 246, 1);
 
-    --secondary-foreground: rgba(112, 135, 140, 1);
+    --muted: rgba(93, 112, 116, 1);
+    --muted-75: rgba(93, 112, 116, 0.75);
+    --muted-50: rgba(93, 112, 116, 0.5);
+    --muted-25: rgba(93, 112, 116, 0.25);
 
-    --muted: rgba(248, 248, 248, 1);
-    --muted-75: rgba(248, 248, 248, 0.75);
-    --muted-50: rgba(248, 248, 248, 0.5);
-    --muted-25: rgba(248, 248, 248, 0.25);
+    --muted-foreground: rgb(93, 112, 116);
 
-    --muted-foreground: rgb(102, 123, 128);
+    --accent: rgba(243, 182, 176, 1);
+    --accent-75: rgba(243, 182, 176, 0.75);
+    --accent-50: rgba(243, 182, 176, 0.5);
+    --accent-25: rgba(243, 182, 176, 0.25);
 
-    --accent: rgba(248, 248, 248, 1);
-    --accent-75: rgba(248, 248, 248, 0.75);
-    --accent-50: rgba(248, 248, 248, 0.5);
-    --accent-25: rgba(248, 248, 248, 0.25);
-
-    --accent-foreground: rgb(238, 151, 136);
-    --accent-foreground-75: rgba(238, 151, 136, 0.75);
-    --accent-foreground-50: rgba(238, 151, 136, 0.5);
-    --accent-foreground-25: rgba(238, 151, 136, 0.25);
+    --accent-foreground: rgb(255, 255, 255);
+    --accent-foreground-75: rgba(255, 255, 255, 0.75);
+    --accent-foreground-50: rgba(255, 255, 255, 0.5);
+    --accent-foreground-25: rgba(255, 255, 255, 0.25);
 
     --destructive: rgba(153, 0, 0, 1);
     --destructive-75: rgba(153, 0, 0, 0.75);
@@ -70,22 +69,22 @@
     --destructive-foreground-50: rgba(250, 250, 250, 0.5);
     --destructive-foreground-25: rgba(250, 250, 250, 0.25);
 
-    --border: rgba(232, 232, 232, 1);
-    --border-75: rgba(232, 232, 232, 0.75);
-    --border-50: rgba(232, 232, 232, 0.5);
-    --border-25: rgba(232, 232, 232, 0.25);
+    --border: rgba(93, 112, 116, 1);
+    --border-75: rgba(93, 112, 116, 0.75);
+    --border-50: rgba(93, 112, 116, 0.5);
+    --border-25: rgba(93, 112, 116, 0.25);
 
-    --input: rgba(232, 232, 232, 1);
-    --input-75: rgba(232, 232, 232, 0.75);
-    --input-50: rgba(232, 232, 232, 0.5);
-    --input-25: rgba(232, 232, 232, 0.25);
+    --input: rgba(93, 112, 116, 1);
+    --input-75: rgba(93, 112, 116, 0.75);
+    --input-50: rgba(93, 112, 116, 0.5);
+    --input-25: rgba(93, 112, 116, 0.25);
 
-    --ring: rgb(238, 151, 136);
-    --ring-75: rgba(238, 151, 136, 0.75);
-    --ring-50: rgba(238, 151, 136, 0.5);
-    --ring-25: rgba(238, 151, 136, 0.25);
+    --ring: rgb(93, 112, 116);
+    --ring-75: rgba(93, 112, 116, 0.75);
+    --ring-50: rgba(93, 112, 116, 0.5);
+    --ring-25: rgba(93, 112, 116, 0.25);
 
-    --radius: 0.6rem;
+    --radius: 0.4rem;
     --font-ephesis: 'Ephesis', serif;
   }
 
@@ -104,9 +103,9 @@
 }
 
 .shape-custom {
-  box-shadow: 110px 75px 0px 4px rgba(112, 135, 140, 0.1);
-  -webkit-box-shadow: 110px 75px 0px 4px rgba(112, 135, 140, 0.1);
-  -moz-box-shadow: 110px 75px 0px 4px rgba(112, 135, 140, 0.1);
+  box-shadow: 110px 75px 0px 4px rgba(93, 112, 116, 0.25);
+  -webkit-box-shadow: 110px 75px 0px 4px rgba(93, 112, 116, 0.25);
+  -moz-box-shadow: 110px 75px 0px 4px rgba(93, 112, 116, 0.25);
 }
 
 .kenburns-top {
@@ -152,4 +151,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+strong {
+  @apply font-semibold;
 }

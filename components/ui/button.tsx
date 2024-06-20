@@ -5,18 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary-75 md:text-md",
+          "bg-primary hover:scale-[1.02] transition-all duration-100 text-primary-foreground shadow  md:text-md font-normal max-md:w-full",
         destructive:
-          "bg-destructive text-destructive-foreground shadow hover:bg-destructive-75",
+          "bg-destructive text-destructive-foreground shadow hover:bg-destructive-75 font-normal",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground md:text-md",
+          "border hover:scale-[1.02] transition-all duration-100 border-input bg-background shadow-sm  md:text-md font-normal text-foreground",
         secondary:
-          "text-popover-foreground shadow-sm rounded-full border border-popover-foreground   bg-background hover:text-accent-foreground hover:border-primary text-md w-36 min-h-12 ",
+          "text-popover-foreground shadow-sm rounded-full border border-popover-foreground   bg-background hover:text-accent-foreground hover:border-primary text-md w-36 min-h-12 font-normal",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

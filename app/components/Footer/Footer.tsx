@@ -4,11 +4,12 @@ import Link from "next/link";
 
 export default function Footer() {
    return (
-    <footer className=" p-6 md:py-12 w-full ">
-      <div className="container max-w-7xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 text-sm">
+    <>
+    <footer className="text-secondary border-t border-secondary">
+      <div className="w-full grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-stretch p-4">
         <div className="grid gap-1">
           <h3 className="font-semibold">Coaching</h3>
-          <Link className="md:hover:underline md:hover:text-primary" href="/coaching">Coaching individuel</Link>
+          <Link className="md:hover:underline md:hover:text-primary " href="/coaching">Coaching individuel</Link>
         </div>
         <div className="grid gap-1">
           <h3 className="font-semibold">E-book</h3>
@@ -31,6 +32,7 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+    </>
   );
 }
 

@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CiCalendar } from "react-icons/ci";
 
-export function PrendreRendezVous() {
+export function PrendreRendezVous({className}: {className: string}) {
     const [key, setKey] = useState(0); // Clé pour forcer le rechargement du composant
 
     useEffect(() => {
@@ -28,14 +28,14 @@ export function PrendreRendezVous() {
     }, [key]); // Dépendance sur la clé pour recharger le script
 
     return (
-        <AlertDialog>
+        <AlertDialog  >
             <AlertDialogTrigger asChild>
-                <Button onClick={() => setKey(prevKey => prevKey + 1)}> {/* Incrémenter la clé pour recharger */}
-                    <CiCalendar className='mr-2 text-lg w-full' />
+                <Button className={className} onClick={() => setKey(prevKey => prevKey + 1)}> {/* Incrémenter la clé pour recharger */}
+                    <CiCalendar className='mr-2 text-xl stroke-1' />
                     Prendre rendez-vous
                 </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className='w-full'>
                 <AlertDialogHeader>
                     <AlertDialogTitle className='text-center'>Je planifie mon rendez-vous</AlertDialogTitle>
                     <AlertDialogDescription>

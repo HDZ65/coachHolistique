@@ -4,8 +4,6 @@ import "./globals.css";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import { cn } from "@/lib/utils"
-import { ThemeProvider } from "./components/theme-provider/theme-provider"
-
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,20 +27,13 @@ export default function RootLayout({
         fontSans.variable
       )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
           <div className="flex flex-col  w-full">
             <Header />
-            <main className=" my-auto flex flex-col justify-center items-center">
+            <main className="max-w-[88rem] mx-auto flex flex-col justify-center px-6 md:px-8 gap-20">
               {children}
-            </main>
+             </main>
           </div>
-          <Footer />
-        </ThemeProvider>
+        
       </body>
     </html>
   );

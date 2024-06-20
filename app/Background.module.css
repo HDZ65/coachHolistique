@@ -9,7 +9,7 @@
     top: 50%; /* Centrer verticalement */
     left: 50%; /* Centrer horizontalement */
     transform: translate(-50%, -50%);
-    color: white; /* Couleur du texte */
+    color: rgb(255, 255, 255); /* Couleur du texte */
     text-align: center;
     border-radius: 10px;
     padding: 20px;

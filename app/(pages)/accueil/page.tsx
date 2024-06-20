@@ -1,15 +1,21 @@
-import Decouvrez from "./components/Accompagnement/Accompagnement"
+import Accompagnement from "./components/Accompagnement/Accompagnement"
 import UnPeuDeMoi from "./components/UnPeuDeMoi/UnPeuDeMoi"
 import FirstAccueil from "./components/FirstAccueil/FirstAccueil"
+import { Newsletter } from "./components/Newsletter/Newsletter"
+import Footer from "@/app/components/Footer/Footer"
+import Ebook from "./components/E-book/E-book"
 
 type Props = {}
-export default function Accueil({}: Props) {
+export default function Accueil({ }: Props) {
   return (
-    <div className="flex flex-col gap-20 w-11/12 md:w-4/5 max-w-7xl mx-auto">
-    <FirstAccueil />
-    <Decouvrez />
-    <UnPeuDeMoi />
-    </div>
+    <>
+      <FirstAccueil />
+      <Accompagnement />
+      <UnPeuDeMoi />
+      <Ebook />
+      <Newsletter />
+      <Footer />
+    </>
   )
 }
 
