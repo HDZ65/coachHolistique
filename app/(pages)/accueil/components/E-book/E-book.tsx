@@ -17,12 +17,12 @@ export default function Ebook() {
                         <div className="h-full flex flex-col gap-6">
                             <p><strong>Transformez vos rêves en réalité.</strong> Attirer le <strong>succès</strong> et investissez en vous-même. <strong>Commencez votre voyage vers une vie meilleure dès aujourd&apos;hui.</strong></p>
                             <Button className="w-full text-secondary" variant="outline">
-                                <BsInfo className='mr-2 text-lg' />
+                                <BsInfo className='mr-2 text-lg' aria-hidden="true" />
                                 En savoir plus
                             </Button>
                         </div>
                         <div>
-                            <Image className="rounded-lg h-full object-cover" src={ebook} alt="ebook" width={400} height={400} />
+                            <Image className="rounded-lg h-full object-cover" src={ebook} alt="Couverture de l'ebook" width={400} height={400} />
                         </div>
                     </div>
                 </article>

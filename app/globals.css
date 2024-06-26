@@ -59,10 +59,10 @@
     --accent-foreground-50: rgba(255, 255, 255, 0.5);
     --accent-foreground-25: rgba(255, 255, 255, 0.25);
 
-    --destructive: rgba(153, 0, 0, 1);
-    --destructive-75: rgba(153, 0, 0, 0.75);
-    --destructive-50: rgba(153, 0, 0, 0.5);
-    --destructive-25: rgba(153, 0, 0, 0.25);
+    --destructive: rgb(195, 90, 90);
+    --destructive-75: rgba(195, 90, 90, 0.75);
+    --destructive-50: rgba(195, 90, 90, 0.5);
+    --destructive-25: rgba(195, 90, 90, 0.25);
 
     --destructive-foreground: rgba(250, 250, 250, 1);
     --destructive-foreground-75: rgba(250, 250, 250, 0.75);
@@ -155,4 +155,7 @@
 
 strong {
   @apply font-semibold;
+}
+h2 {
+  @apply mt-0 !important;
 }

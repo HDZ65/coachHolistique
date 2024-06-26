@@ -24,10 +24,8 @@ const config = {
       },
 
       fontFamily: {
-        'sans': ['Inter', ...fontFamily.sans], // Utilisez 'Inter' comme police principale pour 'sans'
-        'alice': ['Alice', 'serif'], // Définissez 'Alice' avec un fallback 'serif'
-        'montaga': ['Montaga', 'serif'], // Définissez 'Montaga' avec un fallback 'serif'
-        'ephesis': ['var(--font-ephesis)', 'serif']
+        sans: ['var(--font-inter)'],
+        serif: ['var(--font-alice)', 'var(--font-ephesis)', 'var(--font-montaga)'],
       },
       colors: {
         border: "var(--border)",

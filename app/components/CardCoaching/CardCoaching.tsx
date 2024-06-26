@@ -15,7 +15,7 @@ import Link from "next/link";
 interface CardCoachingProps {
   titre: string;
   description: string;
-  children: React.ReactNode;
+  children?: React.ReactNode; // Added this line
 }
 
 function CardCoaching({ titre, description, children }: CardCoachingProps) {

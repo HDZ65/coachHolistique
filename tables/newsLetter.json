@@ -1,0 +1,9 @@
+{
+    "newsletter": [
+      {
+        "id": "SERIAL PRIMARY KEY",
+        "email": "VARCHAR(100) UNIQUE NOT NULL",
+        "subscribed_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+      }
+    ]
+  }
