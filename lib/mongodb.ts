@@ -1,3 +1,5 @@
+// Connexion à la base de données MongoDB
+
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -17,7 +19,7 @@ const connect = async () => {
   try {
     mongoose.connect(MONGODB_URI!, {
       dbName: 'elisabethcoachholistique',
-      bufferCommands: false,
+      bufferCommands: false, 
     });
     console.log('Connected to MongoDB');
   } catch (error) {

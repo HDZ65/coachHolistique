@@ -1,11 +1,14 @@
+// Composent Footer
+
 import { CiInstagram } from "react-icons/ci";
 import Link from "next/link";
+
 
 
 export default function Footer() {
    return (
     <>
-    <footer className="text-secondary border-t border-secondary max-w-[88rem] mx-auto mt-20">
+    <footer className="text-secondary border-t border-secondary  w-full max-w-[88rem] mx-auto mt-20">
       <div className="w-full grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-stretch p-4">
         <div className="grid gap-1">
           <h3 className="font-semibold">Coaching</h3>

@@ -2,7 +2,8 @@
 'use client'
 
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
-import { BookOpenText, Calendar, Home, LineChart, Mail, Package, Package2, Settings, ShoppingCart, Store, Users2 } from "lucide-react";
+import { BookOpenText, Calendar, Home, LineChart, LogOut, Mail, Package, Package2, Settings, ShoppingCart, Store, Users2 } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 // Correction: Component name should start with an uppercase letter
@@ -75,15 +76,15 @@ export default function Menu() {
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                href="/admin/settings"
+              <button
+                onClick={() => signOut()}
                 className="flex w-6 h-6 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
-                <Settings className="w-6 h-6" />
-                <span className="sr-only">Settings</span>
-              </Link>
+                <LogOut className="w-6 h-6" />
+                <span className="sr-only">Se déconnecter</span>
+              </button>
             </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
+            <TooltipContent side="right">Se déconnecter</TooltipContent>
           </Tooltip>
         </nav>
       </aside>

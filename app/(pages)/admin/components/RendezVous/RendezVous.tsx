@@ -19,72 +19,96 @@ interface Appointment {
   date: string;
   time: string;
   prestation: string;
+  prenom: string;
+  email: string;
+  phone: string;
 }
 
 export default function RendezVous() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [currentWeek, setCurrentWeek] = useState(new Date());
-  const [newAppointment, setNewAppointment] = useState({ name: '', date: '', time: '09:00', prestation: '' });
+  const [newAppointment, setNewAppointment] = useState({ name: '', date: '', time: '09:00', prestation: '', prenom: '', email: '', phone: '' });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
-  const [isEditMode, setIsEditMode] = useState(false); // État pour le mode édition
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [prestations, setPrestations] = useState<Prestation[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
-  const FormSchema = z.object({
-    email: z
-      .string({
-        required_error: "Please select an email to display.",
-      })
-      .email(),
-  })
+  interface Prestation {
+    id: string;
+    name: string;
+  }
+
+  interface Appointment {
+    id: number;
+    name: string;
+    date: string;
+    time: string;
+    prestation: string;
+    prenom: string;
+    email: string;
+    phone: string;
+  }
 
   useEffect(() => {
-    // Charger les rendez-vous initiaux (peut être remplacé par une requête API)
-    setAppointments([
-      { id: 1, name: 'Michel', date: '2024-06-25', time: '10:00', prestation: 'Détails du rendez-vous 1' },
-      { id: 2, name: 'Jean', date: '2024-06-25', time: '11:00', prestation: 'Détails du rendez-vous 2' },
-      { id: 3, name: 'Marie', date: '2024-06-26', time: '14:00', prestation: 'Détails du rendez-vous 3' },
-      { id: 4, name: 'Paul', date: '2024-06-27', time: '09:00', prestation: 'Détails du rendez-vous 4' },
-      { id: 5, name: 'Sophie', date: '2024-06-28', time: '16:00', prestation: 'Détails du rendez-vous 5' },
-      { id: 6, name: 'Luc', date: '2024-06-29', time: '13:00', prestation: 'Détails du rendez-vous 6' },
-      { id: 7, name: 'Julie', date: '2024-07-07', time: '15:00', prestation: 'Détails du rendez-vous 7' },
-      { id: 8, name: 'Pierre', date: '2024-07-08', time: '17:00', prestation: 'Détails du rendez-vous 8' },
-      { id: 9, name: 'Sophie', date: '2024-07-09', time: '10:00', prestation: 'Détails du rendez-vous 9' },
-      { id: 10, name: 'Luc', date: '2024-07-10', time: '11:00', prestation: 'Détails du rendez-vous 10' },
-      { id: 11, name: 'Julie', date: '2024-07-11', time: '15:00', prestation: 'Détails du rendez-vous 11' },
-      { id: 12, name: 'Pierre', date: '2024-07-12', time: '17:00', prestation: 'Détails du rendez-vous 12' },
-      { id: 13, name: 'Sophie', date: '2024-07-13', time: '10:00', prestation: 'Détails du rendez-vous 13' },
-      { id: 14, name: 'Luc', date: '2024-07-14', time: '11:00', prestation: 'Détails du rendez-vous 14' },
-      { id: 15, name: 'Julie', date: '2024-07-15', time: '15:00', prestation: 'Détails du rendez-vous 15' },
-      { id: 16, name: 'Pierre', date: '2024-07-16', time: '17:00', prestation: 'Détails du rendez-vous 16' },
-      { id: 17, name: 'Sophie', date: '2024-07-17', time: '10:00', prestation: 'Détails du rendez-vous 17' },
-      { id: 18, name: 'Luc', date: '2024-07-18', time: '11:00', prestation: 'Détails du rendez-vous 18' },
-      { id: 19, name: 'Julie', date: '2024-07-19', time: '15:00', prestation: 'Détails du rendez-vous 19' },
-      { id: 20, name: 'Pierre', date: '2024-07-20', time: '17:00', prestation: 'Détails du rendez-vous 20' },
-      { id: 21, name: 'Sophie', date: '2024-07-21', time: '10:00', prestation: 'Détails du rendez-vous 21' },
-      { id: 22, name: 'Luc', date: '2024-07-22', time: '11:00', prestation: 'Détails du rendez-vous 22' },
-      { id: 23, name: 'Julie', date: '2024-07-23', time: '15:00', prestation: 'Détails du rendez-vous 23' },
-      { id: 24, name: 'Pierre', date: '2024-07-24', time: '17:00', prestation: 'Détails du rendez-vous 24' },
-    ]);
+    // Fonction pour récupérer les prestations
+    const fetchPrestations = async () => {
+      try {
+        const response = await fetch('/api/prestations');
+        const data = await response.json();
+        setPrestations(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des prestations:", error);
+      }
+    };
+
+    fetchPrestations();
   }, []);
 
-  const handleAddAppointment = () => {
-    if (isEditMode && selectedAppointment) {
-      setAppointments(appointments.map(appointment =>
-        appointment.id === selectedAppointment.id ? { ...selectedAppointment, ...newAppointment } : appointment
-      ));
-      setIsEditMode(false);
-    } else {
-      setAppointments([...appointments, { id: Date.now(), name: newAppointment.name, date: newAppointment.date, time: newAppointment.time, prestation: newAppointment.prestation }]);
-    }
-    setNewAppointment({ name: '', date: '', time: '09:00', prestation: '' });
-    setIsDialogOpen(false);
-  };
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch('/api/appointment');
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setAppointments(data);
+        } else {
+          console.error("Les données récupérées ne sont pas un tableau:", data);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des rendez-vous:", error);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  console.log(appointments);
 
   const handleEditAppointment = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
     setNewAppointment(appointment);
     setIsEditMode(true);
     setIsDialogOpen(true);
+  };
+
+  const handleAddAppointment = () => {
+    // Validation des champs du formulaire
+    const { name, date, time, prestation, prenom, email, phone } = newAppointment;
+    if (!name || !date || !time || !prestation || !prenom || !email || !phone) {
+      alert("Tous les champs doivent être remplis.");
+      return;
+    }
+
+    if (isEditMode && selectedAppointment) {
+      setAppointments(appointments.map(appointment =>
+        appointment.id === selectedAppointment.id ? { ...selectedAppointment, ...newAppointment } : appointment
+      ));
+      setIsEditMode(false);
+    } else {
+      setAppointments([...appointments, { id: Date.now(), name, date, time, prestation, prenom, email, phone }]);
+    }
+    setNewAppointment({ name: '', date: '', time: '09:00', prestation: '', prenom: '', email: '', phone: '' });
+    setIsDialogOpen(false);
   };
 
   const handleDeleteAppointment = (id: number) => {
@@ -103,40 +127,47 @@ export default function RendezVous() {
   // Création de créneaux horaires fixes de 9h à 18h toutes les 30 minutes
   const hours = Array.from({ length: 18 }, (_, i) => setMinutes(setHours(new Date(), 9 + Math.floor(i / 2)), (i % 2) * 30));
 
+  const handleCellClick = (day: Date, hour: Date) => {
+    setNewAppointment({
+      ...newAppointment,
+      date: format(day, 'yyyy-MM-dd'),
+      time: format(hour, 'HH:mm')
+    });
+    setIsDialogOpen(true);
+    setIsEditMode(false);
+  };
+
   return (
-    <Card className="p-6 flex flex-col gap-6 text-center" role="region" aria-labelledby="appointments-heading">
-      <div className='grid grid-cols-3 items-center'>
-        <h2 className="text-3xl col-start-2 text-center" id="appointments-heading">Planning</h2>
-        <Button className='col-start-3 justify-self-end' onClick={() => { setIsDialogOpen(true); setIsEditMode(false); }}>Ajouter un rendez-vous</Button>
-      </div>
+    <Card className="p-6 flex flex-col bg-gray-900 text-white gap-6 text-center" role="region" aria-labelledby="appointments-heading">
+      <h2 className="text-3xl text-center" id="appointments-heading">Planning</h2>
       <div className="flex justify-between items-center">
-        <Button variant='outline' onClick={() => setCurrentWeek(addWeeks(currentWeek, -1))}>Semaine précédente</Button>
-        <span>{format(startOfCurrentWeek, 'dd MMM yyyy', { locale: fr })} - {format(endOfCurrentWeek, 'dd MMM yyyy', { locale: fr })}</span>
-        <Button variant='outline' onClick={() => setCurrentWeek(addWeeks(currentWeek, 1))}>Semaine suivante</Button>
+        <Button onClick={() => setCurrentWeek(addWeeks(currentWeek, -1))}>Semaine précédente</Button>
+        <span className='text-2xl'>{format(startOfCurrentWeek, 'dd MMM yyyy', { locale: fr })} - {format(endOfCurrentWeek, 'dd MMM yyyy', { locale: fr })}</span>
+        <Button onClick={() => setCurrentWeek(addWeeks(currentWeek, 1))}>Semaine suivante</Button>
       </div>
-      <Table className="table-fixed border-collapse">
-        <TableHeader className='text-center'>
-          <TableRow className='text-center'>
-            <TableHead className="border border-gray-300 text-center">Heure</TableHead>
+      <Table className="table-fixed rounded-lg border-collapse">
+        <TableHeader className='text-center text-white bg-muted text-base '>
+          <TableRow className='text-center text-white '>
+            <TableHead className="border border-gray-300 text-white text-center ">Heure</TableHead>
             {daysOfWeek.map(day => (
-              <TableHead key={day.toISOString()} className="border text-center border-gray-300">{format(day, 'EEEE dd MMM', { locale: fr })}</TableHead>
+              <TableHead key={day.toISOString()} className="border text-center border-gray-300 text-white">{format(day, 'EEEE dd MMM', { locale: fr })}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody className='text-center'>
+        <TableBody className='text-center text-white'>
           {hours.map((hour, hourIndex) => (
-            <TableRow className='text-center  ' key={hourIndex}>
-              <TableCell className="h-10 border bg-red-50 border-gray-300 text-center">{format(hour, 'HH:mm')}</TableCell>
+            <TableRow className='text-center  text-white' key={hourIndex}>
+              <TableCell className="h-10 border bg-muted text-base border-gray-300 text-center">{format(hour, 'HH:mm')}</TableCell>
               {daysOfWeek.map((day, dayIndex) => {
                 const appointment = currentWeekAppointments.find(appointment =>
                   isSameDay(parseISO(appointment.date), day) &&
                   (appointment.time === format(hour, 'HH:mm') || appointment.time === format(addMinutes(hour, -30), 'HH:mm'))
                 );
                 if (appointment && appointment.time === format(hour, 'HH:mm')) {
-                  const appointmentDuration = 60; // Durée du rendez-vous en minutes
-                  const rowSpan = appointmentDuration / 30; // Nombre de lignes à fusionner
+                  const appointmentDuration = 60;
+                  const rowSpan = appointmentDuration / 30;
                   return (
-                    <TableCell key={dayIndex} className="border text-center border-gray-300" rowSpan={rowSpan}>
+                    <TableCell key={dayIndex} className="border text-center text-white border-gray-300" rowSpan={rowSpan}>
                       <AlertDialog key={appointment.id}>
                         <AlertDialogTrigger asChild>
                           <Button className='w-full h-16' variant="outline" onClick={() => setSelectedAppointment(appointment)}>{appointment.name}</Button>
@@ -160,7 +191,14 @@ export default function RendezVous() {
                     </TableCell>
                   );
                 } else if (!appointment) {
-                  return <TableCell key={dayIndex} className="border text-center border-gray-300" />;
+                  return (
+                    <TableCell
+                      key={dayIndex}
+                      className="border text-center border-gray-300 cursor-pointer hover:bg-secondary"
+                      onClick={() => handleCellClick(day, hour)}
+                      aria-label={`Prendre rendez-vous le ${format(day, 'EEEE dd MMM', { locale: fr })} à ${format(hour, 'HH:mm')}`}
+                    />
+                  );
                 }
                 return null;
               })}
@@ -182,23 +220,23 @@ export default function RendezVous() {
           />
           <Input
             placeholder="Prénom"
-            value={newAppointment.name}
-            onChange={(e) => setNewAppointment({ ...newAppointment, name: e.target.value })}
-            aria-label="Nom du rendez-vous"
+            value={newAppointment.prenom}
+            onChange={(e) => setNewAppointment({ ...newAppointment, prenom: e.target.value })}
+            aria-label="Prénom du rendez-vous"
             className="mb-4"
           />
           <Input
             placeholder="Email"
-            value={newAppointment.name}
-            onChange={(e) => setNewAppointment({ ...newAppointment, name: e.target.value })}
-            aria-label="Nom du rendez-vous"
+            value={newAppointment.email}
+            onChange={(e) => setNewAppointment({ ...newAppointment, email: e.target.value })}
+            aria-label="Email du rendez-vous"
             className="mb-4"
           />
           <Input
             placeholder="Téléphone"
-            value={newAppointment.name}
-            onChange={(e) => setNewAppointment({ ...newAppointment, name: e.target.value })}
-            aria-label="Nom du rendez-vous"
+            value={newAppointment.phone}
+            onChange={(e) => setNewAppointment({ ...newAppointment, phone: e.target.value })}
+            aria-label="Téléphone du rendez-vous"
             className="mb-4"
           />
           <Input
@@ -217,14 +255,19 @@ export default function RendezVous() {
             aria-label="Heure du rendez-vous"
             className="mb-4"
           />
-          <Select >
+          <Select
+            value={newAppointment.prestation}
+            onValueChange={(value) => setNewAppointment({ ...newAppointment, prestation: value })}
+          >
             <SelectTrigger className="bg-secondary-25">
               <SelectValue placeholder="Choisir une prestation" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Holistique">Holistique</SelectItem>
-              <SelectItem value="Tapping">Tapping</SelectItem>
-              <SelectItem value="EFT">EFT</SelectItem>
+              {prestations.map((prestation) => (
+                <SelectItem key={prestation.id} value={prestation.name}>
+                  {prestation.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Button onClick={handleAddAppointment}>{isEditMode ? 'Modifier' : 'Ajouter'}</Button>

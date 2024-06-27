@@ -10,11 +10,17 @@ dotenv.config();
 // Titre: Gestion des routes pour la newsletter
 // Ce fichier gère les requêtes GET et POST pour la newsletter.
 
+// Interface pour typer les données de la newsletter
+interface NewsletterData {
+    email: string;
+    firstName: string;
+}
+
 // Récupère tous les abonnés à la newsletter
 export async function GET(req: NextRequest, res: NextResponse) {
-    await connect();  
+    await connect();
     try {
-        const newsLetter = await NewsLetter.find({}, 'email'); 
+        const newsLetter: NewsletterData[] = await NewsLetter.find({}, 'email firstName');
         return NextResponse.json({ newsLetter });
     } catch (error) {
         console.error("Erreur lors de la récupération des e-mails:", error);
@@ -27,9 +33,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     await connect();  // Connexion à MongoDB
 
     try {
-        const { email } = await req.json();
-        if (!email) {
-            return new NextResponse(JSON.stringify({ message: 'Email est requis' }), { status: 400 });
+        const { email, firstName }: NewsletterData = await req.json();
+        if (!email || !firstName) {
+            return new NextResponse(JSON.stringify({ message: 'Email et prénom sont requis' }), { status: 400 });
         }
 
         // Validation de l'adresse e-mail
@@ -37,7 +43,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             return new NextResponse(JSON.stringify({ message: 'Adresse email non valide' }), { status: 400 });
         }
 
-        const newNewsLetter = new NewsLetter({ email });
+        const newNewsLetter = new NewsLetter({ email, firstName });
         await newNewsLetter.save();
 
         // Configuration de Nodemailer
@@ -49,9 +55,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
             }
         });
 
-        // Contenu de l'email de confirmation
         const emailContent = `
-            <h1>Bienvenue à notre Newsletter sur le Développement Personnel !</h1>
+            <h1>Bonjour ${firstName} !</h1>
+            <h2>Bienvenue à notre Newsletter sur le Développement Personnel !</h2>
             <p>Merci de vous être inscrit à notre newsletter. Vous êtes sur le point de commencer un voyage passionnant vers la croissance personnelle et le bien-être.</p>
             <p>Nous vous apporterons des conseils, des astuces et des histoires inspirantes pour vous aider à devenir la meilleure version de vous-même.</p>
             <p><strong>Élisabeth Coach holistique</strong></p>

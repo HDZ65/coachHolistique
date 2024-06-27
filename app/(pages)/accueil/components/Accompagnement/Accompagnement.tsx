@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import CardCoaching from '../../../../components/CardCoaching/CardCoaching';
 import { BsInfo } from "react-icons/bs";
 import Link from "next/link";
+import { ButtonRendezVous } from "@/app/components/RendezVous/ButtonRendezVous";
 
 const Accompagnement = React.memo(function Accompagnement() {
   return (
@@ -16,7 +17,7 @@ const Accompagnement = React.memo(function Accompagnement() {
           Embarquez pour un <strong>accompagnement</strong> dans votre voyage de <strong>coaching holistique</strong> profond. Ensemble, nous dénouerons les nœuds qui entravent votre <strong>confiance en soi</strong> et aborderons les <strong>défis quotidiens</strong> qui vous empêchent d&rsquo;atteindre vos <strong>objectifs</strong>.
         </p>
       </article>
-      <article className="flex max-md:flex-col gap-6 justify-around  w-full">
+      <article className="flex max-md:items-center max-md:flex-col gap-6 justify-around  w-full">
         <CardCoaching
           titre="Découverte et Évaluation"
           description="Programmez un appel initial pour évaluer vos besoins et définir les objectifs de votre parcours de coaching personnalisé. (durée 30min )"
@@ -49,11 +50,12 @@ const Accompagnement = React.memo(function Accompagnement() {
           </svg>
         </CardCoaching>
       </article>
-      <div className="grid grid-cols-2 md:flex-row gap-4 w-full">
+      <div className="grid grid-cols-2 md:flex-row max-[350px]:gap-2 gap-4 w-full">
         <Button variant="outline">
           <BsInfo className='mr-2 textLg' aria-hidden="true" />
           En savoir plus
         </Button>
+        <ButtonRendezVous/>
       </div>
     </section>
   );
