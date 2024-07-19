@@ -8,8 +8,8 @@ import Link from "next/link";
 export default function Footer() {
    return (
     <>
-    <footer className="text-secondary border-t border-secondary  w-full max-w-[88rem] mx-auto mt-20">
-      <div className="w-full grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-stretch p-4">
+    <footer className="text-secondary w-full container mx-auto ">
+      <div className="w-full grid items-start border-t border-secondary grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-stretch p-4">
         <div className="grid gap-1">
           <h3 className="font-semibold">Coaching</h3>
           <Link className="md:hover:underline md:hover:text-primary " href="/coaching">Coaching individuel</Link>

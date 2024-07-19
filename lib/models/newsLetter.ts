@@ -1,12 +1,18 @@
-// Schema models newsLetter
+// Modèle pour les newsletters
 
 import { Schema, model, models } from 'mongoose';
 
-const newsLetterSchema = new Schema({
-    firstName: { type: String, required: true },
-    email: { type: String, required: true, unique: true }
+// Définition du schéma pour les newsletters
+const newsletterSchema = new Schema({
+    user_id: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
+    }
+}, { 
+    timestamps: true
 });
 
-const NewsLetter = models.NewsLetter || model('NewsLetter', newsLetterSchema);
+const Newsletter = models.Newsletter || model('Newsletter', newsletterSchema);
 
-export default NewsLetter;
+export default Newsletter;

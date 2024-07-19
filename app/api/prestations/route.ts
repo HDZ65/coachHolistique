@@ -1,89 +1,101 @@
 import { NextResponse, NextRequest } from "next/server";
-import prestation from "./../../../lib/models/prestations";
+import Prestation from "@/lib/models/prestations";
 import connect from "../../../lib/mongodb";
 
-// Ce fichier gère les requêtes GET, DELETE, POST pour les prestations.
+// Ce fichier gère les requêtes GET, POST, PUT et DELETE pour les prestations.
 
-interface prestationData {
+export interface PrestationsData {
+    _id: string;
     name: string;
     description: string;
-    duration: number;
+    duration: string;
     price: number;
 }
 
-// Récupère la liste des prestations
-export async function GET(req: NextRequest, res: NextResponse) {
-    await connect();
-    try {
-        const prestations = await prestation.find();
-        return NextResponse.json(prestations);
-    } catch (error) {
-        console.error("Type d'erreur non géré:", error);
-        return NextResponse.json({ error: "Erreur inattendue" }, { status: 500 });
+function validatePrestationsData(data: PrestationsData) {
+    const errors: string[] = [];
+
+    if (!data.name) {
+        errors.push('Le nom est requis');
     }
-};
-
-function validatePrestationData(data: any): { isValid: boolean, errors: string[] } {
-    const errors = [];
-    if (!data.name) errors.push("Le champ 'name' est requis.");
-    if (!data.duration) errors.push("Le champ 'duration' est requis.");
-    if (!data.price) errors.push("Le champ 'price' est requis.");
-
-    return {
-        isValid: errors.length === 0,
-        errors
-    };
+    if (!data.description) {
+        errors.push('La description est requise');
+    }
+    if (!data.duration) {
+        errors.push('La durée est requise');
+    } else if (isNaN(parseInt(data.duration))) { 
+        errors.push('La durée doit être un nombre');
+    }
+    if (!data.price) {
+        errors.push('Le prix est requis');
+    } else if (data.price < 0) {
+        errors.push('Le prix ne peut pas être négatif');
+    } else if (data.price > 10000) {
+        errors.push('Le prix ne peut pas dépasser 10000€');
+    } else if (data.price === 0) {
+        errors.push('Le prix ne peut pas être de 0€');
+    } 
+    return errors;
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+// Récupère toutes les prestations
+export async function GET(req: NextRequest) {
     await connect();
     try {
-        const data = await req.json();
-        const prestationData = data.prestationData as prestationData | undefined;
+        const prestations = await Prestation.find({});
+        return NextResponse.json({ prestations });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des prestations:", error as Error);
+        return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error: (error as Error).message }, { status: 500 });
+    }
+}
 
-        const { isValid, errors } = validatePrestationData(prestationData);
-
-        if (!isValid) {
-            return NextResponse.json({
-                error: "Données manquantes",
-                details: errors.join(" ")
-            }, { status: 400 });
+// Création d'une nouvelle prestation
+export async function POST(req: NextRequest) {
+    await connect();
+    try {
+        const prestationData = await req.json();
+        const newPrestation = new Prestation(prestationData);
+        const errors = validatePrestationsData(newPrestation);
+        if (errors.length > 0) {
+            return NextResponse.json({ message: "Erreurs dans les données envoyées", errors }, { status: 400 });
         }
-
-        const newPrestation = new prestation(prestationData);
         await newPrestation.save();
-        return NextResponse.json(newPrestation);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            console.error("Erreur lors de la création de la prestation:", error);
-            return NextResponse.json({ error: "Erreur inattendue", details: error.message }, { status: 500 });
-        } else {
-            console.error("Erreur de type inconnu lors de la création de la prestation");
-            return NextResponse.json({ error: "Erreur inattendue" }, { status: 500 });
+        return NextResponse.json({ message: "Prestation créée avec succès! Vous allez adorer cette nouvelle addition!", newPrestation }, { status: 201 });
+    } catch (error) {
+        console.error("Erreur lors de la création de la prestation:", error as Error);
+        return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error: (error as Error).message }, { status: 500 });
+    }
+}
+
+// Mise à jour d'une prestation
+export async function PUT(req: NextRequest) {
+    await connect();
+    try {
+        const { id, prestationData } = await req.json();
+        const updatedPrestation = await Prestation.findByIdAndUpdate(id, prestationData, { new: true });
+        if (!updatedPrestation) {
+            return NextResponse.json({ message: "Hmm, on dirait que cette prestation n'existe pas. Essayez avec une autre!" }, { status: 404 });
         }
+        return NextResponse.json({ message: "Prestation mise à jour avec succès! C'est encore mieux maintenant!", updatedPrestation });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de la prestation:", error as Error);
+        return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error: (error as Error).message }, { status: 500 });
     }
-};
+}
 
-export async function DELETE(req: NextRequest, res: NextResponse) {
+// Suppression d'une prestation
+export async function DELETE(req: NextRequest) {
     await connect();
     try {
-        const { id } = await req.json() as { id: string };
-        await prestation.findByIdAndDelete(id);
-        return NextResponse.json({ message: "Prestation supprimée" });
+        const { id } = await req.json();
+        const deletedPrestation = await Prestation.findByIdAndDelete(id);
+        if (!deletedPrestation) {
+            return NextResponse.json({ message: "Hmm, on dirait que cette prestation n'existe pas. Essayez avec une autre!" }, { status: 404 });
+        }
+        return NextResponse.json({ message: "Prestation supprimée avec succès! Elle ne nous manquera pas trop." });
     } catch (error) {
-        console.error("Type d'erreur non géré:", error);
-        return NextResponse.json({ error: "Erreur inattendue" }, { status: 500 });
+        console.error("Erreur lors de la suppression de la prestation:", error as Error);
+        return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error: (error as Error).message }, { status: 500 });
     }
-};
-
-export async function PUT(req: NextRequest, res: NextResponse) {
-    await connect();
-    try {
-        const { id, prestationData } = await req.json() as { id: string, prestationData: prestationData };
-        await prestation.findByIdAndUpdate(id, prestationData);
-        return NextResponse.json({ message: "Prestation modifiée" });
-    } catch (error) {
-        console.error("Type d'erreur non géré:", error);
-        return NextResponse.json({ error: "Erreur inattendue" }, { status: 500 });
-    }
-};
+}

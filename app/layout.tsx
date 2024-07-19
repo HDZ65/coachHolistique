@@ -28,12 +28,12 @@ export default function RootLayout({
     <html lang="fr">
       <body
         className={cn(
-          `flex flex-col items-center justify-between min-h-[100dvh] overflow-x-hidden max-w-[100dvw] bg-background font-sans antialiased ${fontInter.variable}`
+          `flex flex-col items-center justify-between gap-6 md:gap-20 min-h-[100dvh] overflow-x-hidden max-w-[100dvw] bg-background font-sans antialiased ${fontInter.variable}`
         )}
       >
           <Header />
           <main
-            className="container mx-auto flex flex-col justify-center max-[350px]:px-2 px-6 md:px-8 gap-20"
+            className="container mx-auto flex flex-col justify-center max-[350px]:px-2 px-6 md:px-8 gap-20 "
             role="main"
             aria-label="Contenu principal"
           >

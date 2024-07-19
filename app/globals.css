@@ -59,10 +59,10 @@
     --accent-foreground-50: rgba(255, 255, 255, 0.5);
     --accent-foreground-25: rgba(255, 255, 255, 0.25);
 
-    --destructive: rgb(195, 90, 90);
-    --destructive-75: rgba(195, 90, 90, 0.75);
-    --destructive-50: rgba(195, 90, 90, 0.5);
-    --destructive-25: rgba(195, 90, 90, 0.25);
+    --destructive: rgb(220, 38, 38);
+    --destructive-75: rgba(220, 38, 38, 0.75);
+    --destructive-50: rgba(220, 38, 38, 0.5);
+    --destructive-25: rgba(227, 11, 11, 0.25);
 
     --destructive-foreground: rgba(250, 250, 250, 1);
     --destructive-foreground-75: rgba(250, 250, 250, 0.75);
@@ -79,10 +79,10 @@
     --input-50: rgba(93, 112, 116, 0.5);
     --input-25: rgba(93, 112, 116, 0.25);
 
-    --ring: rgb(93, 112, 116);
-    --ring-75: rgba(93, 112, 116, 0.75);
-    --ring-50: rgba(93, 112, 116, 0.5);
-    --ring-25: rgba(93, 112, 116, 0.25);
+    --ring: rgb(243, 182, 176);
+    --ring-75: rgba(243, 182, 176, 0.75);
+    --ring-50: rgba(243, 182, 176, 0.5);
+    --ring-25: rgba(243, 182, 176, 0.25);
 
     --radius: 0.4rem;
     --font-ephesis: 'Ephesis', serif;

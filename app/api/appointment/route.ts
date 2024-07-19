@@ -1,30 +1,28 @@
-// Importations nécessaires
-import appointment from "@/lib/models/appointment";
+import { NextResponse, NextRequest } from "next/server";
+import Appointment from "@/lib/models/appointment";
+import User from "@/lib/models/users";
 import connect from "../../../lib/mongodb";
-import { NextRequest, NextResponse } from "next/server";
+import Prestation from "@/lib/models/prestations"; // Correction de l'importation
 
-// Titre: Gestion des routes pour les rendez-vous
 // Ce fichier gère les requêtes GET, POST, DELETE et PUT pour les rendez-vous.
 
 interface AppointmentData {
-    name: string;
-    firstName: string;
-    phone: number;
+    nom: string;
+    prenom: string;
     email: string;
-    date: Date;
-    categoryId: string;
+    mobile: string;
+    prestationId: string;
+    date: string; 
 }
 
-// Fonction pour valider les données de rendez-vous
 function validateAppointmentData(data: AppointmentData): { isValid: boolean, errors: string[] } {
     const errors = [];
-    if (!data.name) errors.push("Le champ 'name' est requis.");
-    if (!data.firstName) errors.push("Le champ 'firstName' est requis.");
-    if (!data.phone) errors.push("Le champ 'phone' est requis.");
+    if (!data.nom) errors.push("Le champ 'nom' est requis.");
+    if (!data.prenom) errors.push("Le champ 'prenom' est requis.");
     if (!data.email) errors.push("Le champ 'email' est requis.");
+    if (!data.mobile) errors.push("Le champ 'mobile' est requis.");
+    if (!data.prestationId) errors.push("Le champ 'prestationId' est requis.");
     if (!data.date) errors.push("Le champ 'date' est requis.");
-    if (!data.categoryId) errors.push("Le champ 'categoryId' est requis.");
-
     return {
         isValid: errors.length === 0,
         errors
@@ -32,23 +30,27 @@ function validateAppointmentData(data: AppointmentData): { isValid: boolean, err
 }
 
 // Récupère tous les rendez-vous
-export async function GET(req: NextRequest, res: NextResponse) {
-    await connect(); // Connexion à la base de données
+export async function GET(req: NextRequest) {
+    await connect();
     try {
-        const allAppointments = await appointment.find({});
-        return NextResponse.json({ allAppointments });
+        const appointments = await Appointment.find({}).populate('prestation_id', 'name').populate('user_id', 'nom prenom email mobile');
+        return NextResponse.json({ appointments });
     } catch (error) {
-        const typedError = error as Error;
-        console.error("GET Error:", typedError); // Log d'erreur
-        return NextResponse.json({ error: "Erreur interne du serveur", details: typedError.message }, { status: 500 });
+        console.error("Erreur lors de la récupération des rendez-vous:", error as Error);
+        return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error: (error as Error).message }, { status: 500 });
     }
-};
+}
 
-// Crée un nouveau rendez-vous
-export async function POST(req: NextRequest, res: NextResponse) {
-    await connect(); // Connexion à la base de données
+
+// Création d'un nouveau rendez-vous
+export async function POST(req: NextRequest) {
+    await connect();
     try {
-        const { appointmentData } = await req.json() as { appointmentData: AppointmentData };
+        const appointmentData: AppointmentData = await req.json();
+
+        // Journalisation des données reçues
+        console.log("Données reçues pour le rendez-vous:", appointmentData);
+
         const { isValid, errors } = validateAppointmentData(appointmentData);
 
         if (!isValid) {
@@ -58,29 +60,66 @@ export async function POST(req: NextRequest, res: NextResponse) {
             }, { status: 400 });
         }
 
-        const newAppointment = new appointment(appointmentData);
-        await newAppointment.save();
-        return NextResponse.json({ message: "Rendez-vous créé avec succès", newAppointment }, { status: 201 });
-    } catch (error) {
-        const typedError = error as Error;
-        console.error("POST Error:", typedError); // Log d'erreur
-        return NextResponse.json({ error: "Erreur lors de la création du rendez-vous", details: typedError.message }, { status: 500 });
-    }
-};
+        // Vérification de l'existence de l'utilisateur
+        let user = await User.findOne({ email: appointmentData.email });
+        if (!user) {
+            // Créer un nouvel utilisateur avec les informations fournies
+            user = new User({
+                nom: appointmentData.nom,
+                prenom: appointmentData.prenom,
+                email: appointmentData.email,
+                mobile: appointmentData.mobile
+            });
+            await user.save();
+        }
 
-export async function DELETE(req: NextRequest, res: NextResponse) {
+        // Vérification de l'unicité du rendez-vous pour l'utilisateur à la même date et heure
+        const existingAppointment = await Appointment.findOne({
+            user_id: user._id,
+            date: new Date(appointmentData.date)
+        });
+
+        if (existingAppointment) {
+            return NextResponse.json({
+                error: "Un rendez-vous existe déjà pour cet utilisateur à cette date et heure. Essayez une autre date!"
+            }, { status: 409 });
+        }
+
+        // Créer le rendez-vous
+        const newAppointment = new Appointment({
+            prestation_id: appointmentData.prestationId,
+            date: new Date(appointmentData.date),
+            user_id: user._id
+        });
+        await newAppointment.save();
+
+        return NextResponse.json({ message: "Votre rendez-vous a bien été pris en compte ! Préparez-vous pour une expérience incroyable!", newAppointment }, { status: 201 });
+    } catch (error) {
+        const typedError = error as any; // Utilisation de 'any' pour contourner le problème de typage
+        if (typedError.name === 'MongoError' && typedError.code === 11000) {
+            return NextResponse.json({ error: "Un rendez-vous existe déjà à cette date et heure. Essayez une autre date!" }, { status: 409 });
+        }
+        console.error("POST Error:", typedError);
+        return NextResponse.json({ error: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", details: typedError.message }, { status: 500 });
+    }
+}
+
+// Suppression d'un rendez-vous
+export async function DELETE(req: NextRequest) {
     await connect();
     try {
         const { id } = await req.json() as { id: string };
-        await appointment.findByIdAndDelete(id);
-        return NextResponse.json({ message: "Rendez-vous supprimé" });
+        await Appointment.findByIdAndDelete(id);
+        return NextResponse.json({ message: "Rendez-vous supprimé avec succès! Espérons que ce n'était pas trop important." });
     } catch (error) {
-        console.error("Type d'erreur non géré:", error);
-        return NextResponse.json({ error: "Erreur inattendue" }, { status: 500 });
+        const typedError = error as Error;
+        console.error("DELETE Error:", typedError);
+        return NextResponse.json({ error: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", details: typedError.message }, { status: 500 });
     }
-};
+}
 
-export async function PUT(req: NextRequest, res: NextResponse) {
+// Mise à jour d'un rendez-vous
+export async function PUT(req: NextRequest) {
     await connect();
     try {
         const { id, appointmentData } = await req.json() as { id: string, appointmentData: AppointmentData };
@@ -93,10 +132,18 @@ export async function PUT(req: NextRequest, res: NextResponse) {
             }, { status: 400 });
         }
 
-        await appointment.findByIdAndUpdate(id, appointmentData);
-        return NextResponse.json({ message: "Rendez-vous modifié" });
+        const updatedAppointment = await Appointment.findByIdAndUpdate(id, appointmentData, { new: true });
+        if (!updatedAppointment) {
+            return NextResponse.json({ error: "Rendez-vous non trouvé. Essayez avec un autre ID!" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "Rendez-vous modifié avec succès! Tout est prêt pour votre prochaine visite!", updatedAppointment });
     } catch (error) {
-        console.error("Type d'erreur non géré:", error);
-        return NextResponse.json({ error: "Erreur inattendue" }, { status: 500 });
+        const typedError = error as any; // Utilisation de 'any' pour contourner le problème de typage
+        if (typedError.name === 'MongoError' && typedError.code === 11000) {
+            return NextResponse.json({ error: "Un rendez-vous existe déjà à cette date et heure. Essayez une autre date!" }, { status: 409 });
+        }
+        console.error("PUT Error:", typedError);
+        return NextResponse.json({ error: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", details: typedError.message }, { status: 500 });
     }
-};
+}

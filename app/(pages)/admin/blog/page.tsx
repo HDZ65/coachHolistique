@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Blog from "../components/Blog/Blog";
 import Menu from "../components/Menu/Menu";
 import LoginForm from "../components/LoginForm/LoginForm";
+import MesArticles from "../components/MesArticles/MesArticles";
 
 export default function Page() {
   const { data: session } = useSession();
@@ -12,6 +13,7 @@ export default function Page() {
     return (
       <>
         <Menu />
+        <MesArticles />
         <Blog />
       </>
     );

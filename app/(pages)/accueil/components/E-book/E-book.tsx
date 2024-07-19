@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { BsInfo } from "react-icons/bs";
 import ebook from './../../../../assets/anna-demianenko-CPWhnIkL4Lk-unsplash.jpg';
+import Link from "next/link";
 
 export default function Ebook() {
     return (
@@ -29,7 +30,9 @@ export default function Ebook() {
                 <article className="flex flex-col gap-6">
                     <div className="flex flex-col gap-1">
                         <h4 className="text-sm">E-book</h4>
-                        <h2 className="text-2xl text-secondary underline font-semibold">Grâce à la loi de l&apos;attraction</h2>
+                        <Link href="/e-book">
+                            <h2 className="text-2xl text-secondary underline font-semibold">Grâce à la loi de l&apos;attraction</h2>
+                        </Link>
                     </div>
                     <p className="h-full">Vous y trouverez des <strong>conseils</strong>, des <strong className="font-semibold">exercices</strong> et des <strong>outils</strong> pour vous aider à mettre en place la <strong>loi de l&apos;attraction</strong> dans votre vie et vous accompagner dans votre démarche.</p>
                 </article>

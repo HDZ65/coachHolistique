@@ -1,5 +1,5 @@
-import { isEmail } from 'validator';
 import NewsLetter from "@/lib/models/newsLetter";
+import User from "@/lib/models/users";
 import connect from "../../../lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -13,37 +13,60 @@ dotenv.config();
 // Interface pour typer les données de la newsletter
 interface NewsletterData {
     email: string;
-    firstName: string;
+    prenom: string;
+}
+
+// Fonction de validation des données de la newsletter
+function validateNewsletterData(data: NewsletterData): { isValid: boolean, errors: string[] } {
+    const errors = [];
+    if (!data.email) errors.push("Le champ 'email' est requis.");
+    if (!data.prenom) errors.push("Le champ 'prenom' est requis.");
+    if (data.email && !/.+\@.+\..+/.test(data.email)) errors.push("Adresse email non valide.");
+    return {
+        isValid: errors.length === 0,
+        errors
+    };
 }
 
 // Récupère tous les abonnés à la newsletter
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
     await connect();
     try {
-        const newsLetter: NewsletterData[] = await NewsLetter.find({}, 'email firstName');
+        const newsLetter = await NewsLetter.find({}).populate('user_id', 'email prenom');
         return NextResponse.json({ newsLetter });
     } catch (error) {
         console.error("Erreur lors de la récupération des e-mails:", error);
-        return NextResponse.json({ message: "Erreur serveur", error }, { status: 500 });
+        return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error }, { status: 500 });
     }
 }
 
 // Inscription à la newsletter
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     await connect();  // Connexion à MongoDB
 
     try {
-        const { email, firstName }: NewsletterData = await req.json();
-        if (!email || !firstName) {
-            return new NextResponse(JSON.stringify({ message: 'Email et prénom sont requis' }), { status: 400 });
+        const { email, prenom }: NewsletterData = await req.json();
+        const { isValid, errors } = validateNewsletterData({ email, prenom });
+
+        if (!isValid) {
+            return new NextResponse(JSON.stringify({ message: 'Validation des données échouée', details: errors.join(", ") }), { status: 400 });
         }
 
-        // Validation de l'adresse e-mail
-        if (!isEmail(email, { require_tld: true })) {
-            return new NextResponse(JSON.stringify({ message: 'Adresse email non valide' }), { status: 400 });
+        // Vérification de l'existence de l'utilisateur
+        let user = await User.findOne({ email });
+        if (!user) {
+            // Créer un nouvel utilisateur avec les informations minimales nécessaires
+            user = new User({ email, prenom });
+            await user.save();
         }
 
-        const newNewsLetter = new NewsLetter({ email, firstName });
+        // Vérifier si l'utilisateur est déjà inscrit à la newsletter
+        const alreadySubscribed = await NewsLetter.exists({ user_id: user._id });
+        if (alreadySubscribed) {
+            return new NextResponse(JSON.stringify({ message: 'Cet utilisateur est déjà inscrit à la newsletter.' }), { status: 409 });
+        }
+
+        const newNewsLetter = new NewsLetter({ user_id: user._id });
         await newNewsLetter.save();
 
         // Configuration de Nodemailer
@@ -56,7 +79,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         });
 
         const emailContent = `
-            <h1>Bonjour ${firstName} !</h1>
+            <h1>Bonjour ${prenom} !</h1>
             <h2>Bienvenue à notre Newsletter sur le Développement Personnel !</h2>
             <p>Merci de vous être inscrit à notre newsletter. Vous êtes sur le point de commencer un voyage passionnant vers la croissance personnelle et le bien-être.</p>
             <p>Nous vous apporterons des conseils, des astuces et des histoires inspirantes pour vous aider à devenir la meilleure version de vous-même.</p>
@@ -72,14 +95,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
             html: emailContent
         });
 
-        return new NextResponse(JSON.stringify({ message: 'Inscription à la newsletter réussie', data: newNewsLetter }), { status: 201 });
+        return new NextResponse(JSON.stringify({ message: 'Inscription à la newsletter réussie! Préparez-vous pour des nouvelles passionnantes!', data: newNewsLetter }), { status: 201 });
 
     } catch (error: unknown) {
         if (error instanceof Error && 'code' in error && (error as any).code === 11000) {
-            return new NextResponse(JSON.stringify({ message: 'Cet email est déjà inscrit à la newsletter.' }), { status: 409 });
+            return new NextResponse(JSON.stringify({ message: 'Cet utilisateur est déjà inscrit à la newsletter.' }), { status: 409 });
         } else {
             console.error("Erreur lors de l'envoi de l'email:", error);
-            return new NextResponse(JSON.stringify({ message: "Erreur lors de l'envoi de l'email", error }), { status: 500 });
+            return new NextResponse(JSON.stringify({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error }), { status: 500 });
         }
     }
 }

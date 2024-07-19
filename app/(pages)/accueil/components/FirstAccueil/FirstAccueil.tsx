@@ -14,7 +14,7 @@ const FirstAccueil = React.memo(function FirstAccueil() {
                 className="shape-custom rounded-full absolute left-[-18%] top-[-5%] size-80 sm:size-96 bg-accent-25 z-10" 
                 aria-hidden="true"
             />
-            <article className="relative flex flex-col items-start justify-center gap-8 md:w-1/2 z-30">
+            <article className="relative flex flex-col items-start justify-center gap-6 md:gap-8 md:w-1/2 z-30">
                 <h1 className={`text-4xl z-30 ${fontEphesis.className}`}>
                     Elisabeth, coach holistique
                 </h1>

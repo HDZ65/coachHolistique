@@ -45,7 +45,7 @@ export function Newsletter() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const onSubmit = async (data: { email: string, firstName: string }) => {
-        console.log("Données soumises:", data);
+        // console.log("Données soumises:", data);
         try {
             const response = await fetch('/api/newsletter', {
                 method: 'POST',
@@ -56,7 +56,7 @@ export function Newsletter() {
             });
 
             const result = await response.json();
-            console.log("Réponse du serveur:", result);
+            // console.log("Réponse du serveur:", result);
 
             if (!response.ok) {
                 setErrorMessage(result.message || "Une erreur est survenue.");

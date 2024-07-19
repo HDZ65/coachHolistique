@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+// Authentification pour l'admin
+
 export const authOptions = {
   providers: [
     CredentialsProvider({

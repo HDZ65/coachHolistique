@@ -1,3 +1,5 @@
+'use client'
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,7 +18,7 @@ import CardRDV from "./CardRDV/CardRDV"
 import React, { useState } from 'react';
 import Paypal from "./Paypal/Paypal";
 import { CalendrierRDV } from "./CalendrierRDV/CalendrierRDV"
-import { log } from "console"
+
 
 
 export function ButtonRendezVous() {
