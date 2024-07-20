@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="fr">
       <body
         className={cn(
-          `flex flex-col items-center justify-between gap-6 md:gap-20 min-h-[100dvh] overflow-x-hidden max-w-[100dvw] bg-background font-sans antialiased ${fontInter.variable}`
+          `flex flex-col items-center justify-between gap-6 md:gap-12 min-h-[100dvh] overflow-x-hidden max-w-[100dvw] bg-background  font-sans antialiased ${fontInter.variable}`
         )}
       >
           <Header />

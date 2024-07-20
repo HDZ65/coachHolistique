@@ -49,7 +49,7 @@ export default function Blog() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(articleData), // Correction ici
+          body: JSON.stringify(articleData),
         });
 
         if (response.ok) {
@@ -58,7 +58,7 @@ export default function Blog() {
           setSubtitle('');
           setContent('');
           setImage(null);
-          window.location.reload(); // Recharger la page après l'ajout réussi
+          window.location.reload(); 
         } else {
           const errorData = await response.json();
           setError(errorData.details || 'Erreur lors de l\'ajout de l\'article');

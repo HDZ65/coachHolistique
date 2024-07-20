@@ -6,7 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 // Ce fichier gère les requêtes GET, POST, DELETE et PUT pour les utilisateurs.
 
 // Interface pour typer les données des utilisateurs
-interface UserData {
+export interface UserData {
+    _id?: string;
     nom?: string;
     prenom: string;
     email: string;

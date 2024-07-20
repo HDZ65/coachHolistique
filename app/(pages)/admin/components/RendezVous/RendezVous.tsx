@@ -12,6 +12,7 @@ import { fr } from 'date-fns/locale'; // Importer la locale française
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FormControl } from '@/components/ui/form';
 import { z } from "zod"
+import { PrestationsData } from '@/app/api/prestations/route';
 
 interface Appointment {
   id: number;
@@ -30,7 +31,7 @@ export default function RendezVous() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [prestations, setPrestations] = useState<Prestation[]>([]);
+  const [prestations, setPrestations] = useState<PrestationsData[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   interface Prestation {
@@ -48,21 +49,23 @@ export default function RendezVous() {
     email: string;
     phone: string;
   }
-
   useEffect(() => {
-    // Fonction pour récupérer les prestations
     const fetchPrestations = async () => {
-      try {
-        const response = await fetch('/api/prestations');
-        const data = await response.json();
-        setPrestations(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des prestations:", error);
-      }
+        try {
+            const res = await fetch("/api/prestations");
+            const data = await res.json();
+            if (Array.isArray(data.prestations)) {
+                setPrestations(data.prestations);
+            } else {
+                console.error("La réponse de l'API ne contient pas un tableau de prestations. Réponse:", data);
+            }
+        } catch (error) {
+            console.log("Erreur lors de la récupération des prestations:", error);
+        }
     };
 
     fetchPrestations();
-  }, []);
+}, []);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -264,7 +267,7 @@ export default function RendezVous() {
             </SelectTrigger>
             <SelectContent>
               {prestations.map((prestation) => (
-                <SelectItem key={prestation.id} value={prestation.name}>
+                <SelectItem key={prestation._id} value={prestation.name}>
                   {prestation.name}
                 </SelectItem>
               ))}

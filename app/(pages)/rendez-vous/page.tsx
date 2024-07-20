@@ -5,5 +5,6 @@ import SalesFunnel from './components/SalesFunnel';
 export default function Page() {
   return (
       <SalesFunnel />
+      
   );
 }

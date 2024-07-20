@@ -6,13 +6,24 @@ import Prestation from "@/lib/models/prestations"; // Correction de l'importatio
 
 // Ce fichier gère les requêtes GET, POST, DELETE et PUT pour les rendez-vous.
 
-interface AppointmentData {
+export interface AppointmentData {
     nom: string;
     prenom: string;
     email: string;
     mobile: string;
     prestationId: string;
+    prestation_id: {
+        name: string;
+        price: string;
+        duration: string;
+    }
     date: string; 
+    user_id: {
+        nom: string;
+        prenom: string;
+        email: string;
+        mobile: string;
+    }
 }
 
 function validateAppointmentData(data: AppointmentData): { isValid: boolean, errors: string[] } {
@@ -41,7 +52,6 @@ export async function GET(req: NextRequest) {
     }
 }
 
-
 // Création d'un nouveau rendez-vous
 export async function POST(req: NextRequest) {
     await connect();
@@ -60,8 +70,8 @@ export async function POST(req: NextRequest) {
             }, { status: 400 });
         }
 
-        // Vérification de l'existence de l'utilisateur
-        let user = await User.findOne({ email: appointmentData.email });
+        // Vérification de l'existence de l'utilisateur par email ou mobile
+        let user = await User.findOne({ $or: [{ email: appointmentData.email }, { mobile: appointmentData.mobile }] });
         if (!user) {
             // Créer un nouvel utilisateur avec les informations fournies
             user = new User({
@@ -70,6 +80,13 @@ export async function POST(req: NextRequest) {
                 email: appointmentData.email,
                 mobile: appointmentData.mobile
             });
+            await user.save();
+        } else {
+            // Mettre à jour les informations de l'utilisateur existant
+            user.nom = appointmentData.nom;
+            user.prenom = appointmentData.prenom;
+            user.email = appointmentData.email;
+            user.mobile = appointmentData.mobile;
             await user.save();
         }
 
@@ -91,15 +108,19 @@ export async function POST(req: NextRequest) {
             date: new Date(appointmentData.date),
             user_id: user._id
         });
+
+        // Journalisation avant la sauvegarde
+        console.log("Nouveau rendez-vous à sauvegarder:", newAppointment);
+
         await newAppointment.save();
 
         return NextResponse.json({ message: "Votre rendez-vous a bien été pris en compte ! Préparez-vous pour une expérience incroyable!", newAppointment }, { status: 201 });
     } catch (error) {
         const typedError = error as any; // Utilisation de 'any' pour contourner le problème de typage
+        console.error("Erreur lors de la création du rendez-vous:", typedError);
         if (typedError.name === 'MongoError' && typedError.code === 11000) {
             return NextResponse.json({ error: "Un rendez-vous existe déjà à cette date et heure. Essayez une autre date!" }, { status: 409 });
         }
-        console.error("POST Error:", typedError);
         return NextResponse.json({ error: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", details: typedError.message }, { status: 500 });
     }
 }
