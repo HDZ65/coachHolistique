@@ -79,9 +79,11 @@ export default function LastArticle() {
         </Card>
       </CardContent>
       <CardFooter className="px-0 pb-0">
+        <Link href="/admin/blog" className="w-full">
         <Button className="w-full">
           Gérer les articles
         </Button>
+        </Link>
       </CardFooter>
     </CardHeader>
   </Card>

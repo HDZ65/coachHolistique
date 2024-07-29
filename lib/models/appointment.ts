@@ -13,6 +13,10 @@ const appointmentSchema = new Schema({
         type: Date, 
         required: true // Date du rendez-vous, requis
     },
+    time: { 
+        type: String, 
+        required: true // Heure du rendez-vous, requis
+    },
     user_id: { 
         type: Schema.Types.ObjectId, 
         ref: 'User', 

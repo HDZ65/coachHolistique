@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios'; // Importer axios pour les requêtes HTTP
+import { formatISO, parseISO } from 'date-fns'; // Importer date-fns pour la gestion des dates
 
 // Interface pour les propriétés du contexte SalesFunnel
 interface SalesFunnelContextProps {
   prestationId: string | null;
-  dateTime: string | null; // Date et heure combinées en format ISO 8601
+  date: Date | undefined;
+  time: string | undefined;
   userInfo: {
     firstName: string;
     lastName: string;
@@ -18,7 +20,8 @@ interface SalesFunnelContextProps {
     price: number;
   } | null;
   setPrestationId: (id: string) => void;
-  setDateTime: (dateTime: string) => void; // Fonction pour définir la date et l'heure combinées en format ISO 8601
+  setDate: (date: Date) => void;
+  setTime: (time: string) => void;
   setUserInfo: (info: { firstName: string; lastName: string; email: string; phoneNumber: string }) => void;
 }
 
@@ -28,7 +31,8 @@ const SalesFunnelContext = createContext<SalesFunnelContextProps | undefined>(un
 // Fournisseur du contexte SalesFunnel
 export const SalesFunnelProvider = ({ children }: { children: ReactNode }) => {
   const [prestationId, setPrestationIdState] = useState<string | null>(null);
-  const [dateTime, setDateTimeState] = useState<string | null>(null); 
+  const [date, setDateState] = useState<Date | undefined>(new Date());
+  const [time, setTimeState] = useState<string | undefined>(undefined);
   const [userInfo, setUserInfoState] = useState({
     firstName: '',
     lastName: '',
@@ -48,10 +52,16 @@ export const SalesFunnelProvider = ({ children }: { children: ReactNode }) => {
     setPrestationIdState(id);
   };
 
-  // Fonction pour définir la date et l'heure combinées en format ISO 8601
-  const setDateTime = (dateTime: string) => {
-    console.log("Date et heure mises à jour:", dateTime);
-    setDateTimeState(dateTime);
+  // Fonction pour définir la date en format ISO 8601 UTC
+  const setDate = (date: Date) => {
+    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    console.log("Date mise à jour (UTC):", utcDate);
+    setDateState(utcDate);
+  };
+
+  const setTime = (time: string) => {
+    console.log("Heure mise à jour:", time);
+    setTimeState(time);
   };
 
   // Fonction pour définir les informations de l'utilisateur
@@ -85,7 +95,7 @@ export const SalesFunnelProvider = ({ children }: { children: ReactNode }) => {
   }, [prestationId]);
 
   return (
-    <SalesFunnelContext.Provider value={{ prestationId, dateTime, userInfo, prestationDetails, setPrestationId, setDateTime, setUserInfo }}>
+    <SalesFunnelContext.Provider value={{ prestationId, date, time, userInfo, prestationDetails, setPrestationId, setDate, setTime, setUserInfo }}>
       {children}
     </SalesFunnelContext.Provider>
   );

@@ -1,10 +1,9 @@
 import { Card, CardHeader, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useSalesFunnel } from '../context/SalesFunnelContext';
 import PaypalButton from './PaypalButton';
 
 
-export default function PaymentForm({ currentStep, nextStep, prevStep, setPaymentSuccess }: { currentStep: number, nextStep: () => void, prevStep: () => void, setPaymentSuccess: (success: boolean) => void }) {
+export default function PaymentForm({ currentStep, prevStep, setPaymentSuccess }: { currentStep: number, prevStep: () => void, setPaymentSuccess: (success: boolean) => void }) {
 
 
   return (
@@ -12,7 +11,7 @@ export default function PaymentForm({ currentStep, nextStep, prevStep, setPaymen
       <CardHeader>
         <CardTitle id="payment-form-title" className="text-2xl">Paiement</CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-12 justify-center sm:flex-row sm:h-[23rem]">
+      <CardContent className="flex gap-12 justify-center sm:flex-row ">
       <PaypalButton setPaymentSuccess={setPaymentSuccess} />
       </CardContent>
       <CardFooter>

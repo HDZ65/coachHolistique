@@ -1,121 +1,67 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+// Composant principal pour la gestion des rendez-vous ( Calendrier )
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogTrigger, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { startOfWeek, endOfWeek, addDays, format, isSameDay, parseISO, setHours, setMinutes, addWeeks, addMinutes } from 'date-fns';
-import { fr } from 'date-fns/locale'; // Importer la locale française
+import { fr } from 'date-fns/locale';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FormControl } from '@/components/ui/form';
-import { z } from "zod"
-import { PrestationsData } from '@/app/api/prestations/route';
+import { AppointmentData } from '@/app/api/appointment/route';
+import { useFetchAppointments } from '@/app/hooks/useFetchAppointments';
+import { useFetchPrestations } from '@/app/hooks/useFetchPrestations';
+import { useAddAppointment } from '@/app/hooks/useAddAppointment';
+import { useDeleteAppointment } from '@/app/hooks/useDeleteAppointment';
+import { useFetchUsers } from '@/app/hooks/useFetchUsers';
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 
-interface Appointment {
-  id: number;
-  name: string;
-  date: string;
-  time: string;
-  prestation: string;
-  prenom: string;
-  email: string;
-  phone: string;
-}
 
 export default function RendezVous() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
-  const [newAppointment, setNewAppointment] = useState({ name: '', date: '', time: '09:00', prestation: '', prenom: '', email: '', phone: '' });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<AppointmentData | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [prestations, setPrestations] = useState<PrestationsData[]>([]);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const { appointments, setAppointments, error: fetchError } = useFetchAppointments();
+  const { prestations } = useFetchPrestations();
+  const { addAppointment, error: addError, success } = useAddAppointment();
+  const { deleteAppointment } = useDeleteAppointment(appointments, setAppointments);
+  const { users, error: fetchUsersError } = useFetchUsers();
 
-  interface Prestation {
-    id: string;
-    name: string;
-  }
+  const [newAppointment, setNewAppointment] = useState<AppointmentData>({
+    _id: '',
+    nom: '',
+    prenom: '',
+    email: '',
+    mobile: '',
+    prestationId: '',
+    prestation_id: { name: '', price: '', duration: '' },
+    date: '',
+    time: '',
+    user_id: { nom: '', prenom: '', email: '', mobile: '' }
+  });
 
-  interface Appointment {
-    id: number;
-    name: string;
-    date: string;
-    time: string;
-    prestation: string;
-    prenom: string;
-    email: string;
-    phone: string;
-  }
-  useEffect(() => {
-    const fetchPrestations = async () => {
-        try {
-            const res = await fetch("/api/prestations");
-            const data = await res.json();
-            if (Array.isArray(data.prestations)) {
-                setPrestations(data.prestations);
-            } else {
-                console.error("La réponse de l'API ne contient pas un tableau de prestations. Réponse:", data);
-            }
-        } catch (error) {
-            console.log("Erreur lors de la récupération des prestations:", error);
-        }
-    };
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-    fetchPrestations();
-}, []);
+  const filteredUsers = users.filter(user =>
+    `${user.nom} ${user.prenom}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch('/api/appointment');
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setAppointments(data);
-        } else {
-          console.error("Les données récupérées ne sont pas un tableau:", data);
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des rendez-vous:", error);
-      }
-    };
-
-    fetchAppointments();
-  }, []);
-
-  console.log(appointments);
-
-  const handleEditAppointment = (appointment: Appointment) => {
+  const handleEditAppointment = (appointment: AppointmentData) => {
     setSelectedAppointment(appointment);
-    setNewAppointment(appointment);
+    setNewAppointment({
+      ...appointment,
+      prestationId: (appointment.prestation_id as any)._id
+    });
     setIsEditMode(true);
     setIsDialogOpen(true);
-  };
-
-  const handleAddAppointment = () => {
-    // Validation des champs du formulaire
-    const { name, date, time, prestation, prenom, email, phone } = newAppointment;
-    if (!name || !date || !time || !prestation || !prenom || !email || !phone) {
-      alert("Tous les champs doivent être remplis.");
-      return;
-    }
-
-    if (isEditMode && selectedAppointment) {
-      setAppointments(appointments.map(appointment =>
-        appointment.id === selectedAppointment.id ? { ...selectedAppointment, ...newAppointment } : appointment
-      ));
-      setIsEditMode(false);
-    } else {
-      setAppointments([...appointments, { id: Date.now(), name, date, time, prestation, prenom, email, phone }]);
-    }
-    setNewAppointment({ name: '', date: '', time: '09:00', prestation: '', prenom: '', email: '', phone: '' });
-    setIsDialogOpen(false);
-  };
-
-  const handleDeleteAppointment = (id: number) => {
-    setAppointments(appointments.filter(appointment => appointment.id !== id));
   };
 
   const startOfCurrentWeek = startOfWeek(currentWeek, { weekStartsOn: 1 });
@@ -127,7 +73,6 @@ export default function RendezVous() {
 
   const daysOfWeek = Array.from({ length: 7 }, (_, i) => addDays(startOfCurrentWeek, i));
 
-  // Création de créneaux horaires fixes de 9h à 18h toutes les 30 minutes
   const hours = Array.from({ length: 18 }, (_, i) => setMinutes(setHours(new Date(), 9 + Math.floor(i / 2)), (i % 2) * 30));
 
   const handleCellClick = (day: Date, hour: Date) => {
@@ -138,6 +83,31 @@ export default function RendezVous() {
     });
     setIsDialogOpen(true);
     setIsEditMode(false);
+  };
+
+  const handleAddAppointment = async () => {
+    await addAppointment(newAppointment);
+    if (success) {
+      setIsDialogOpen(false);
+      setAppointments([...appointments, newAppointment]);
+    }
+  };
+
+  const handleUserSelect = (userId: string) => {
+    setSelectedUser(userId);
+    const user = users.find(user => user._id === userId);
+    if (user) {
+      setNewAppointment({
+        ...newAppointment,
+        user_id: {
+          nom: user.nom,
+          prenom: user.prenom,
+          email: user.email,
+          mobile: user.mobile
+        }
+      });
+    }
+    setIsPopoverOpen(false);
   };
 
   return (
@@ -171,20 +141,24 @@ export default function RendezVous() {
                   const rowSpan = appointmentDuration / 30;
                   return (
                     <TableCell key={dayIndex} className="border text-center text-white border-gray-300" rowSpan={rowSpan}>
-                      <AlertDialog key={appointment.id}>
+                      <AlertDialog key={appointment._id}>
                         <AlertDialogTrigger asChild>
-                          <Button className='w-full h-16' variant="outline" onClick={() => setSelectedAppointment(appointment)}>{appointment.name}</Button>
+                          <Button className='w-full h-16 text-black' variant="outline" onClick={() => setSelectedAppointment(appointment)}>{appointment.user_id.nom} <br /> {appointment.user_id.prenom}</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>{appointment.name}</AlertDialogTitle>
+                            <AlertDialogTitle>{appointment.user_id.nom}</AlertDialogTitle>
                             <AlertDialogDescription>
+                              <p>Prénom: {appointment.user_id.prenom}</p>
+                              <p>Nom: {appointment.user_id.nom}</p>
+                              <p>Email: <a href={`mailto:${appointment.user_id.email}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{appointment.user_id.email}</a></p>
+                              <p>Téléphone: <a href={`https://wa.me/${appointment.user_id.mobile}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{appointment.user_id.mobile}</a></p>
                               <p>Date: {appointment.date}</p>
                               <p>Heure: {appointment.time}</p>
-                              <p>Détails: {appointment.prestation}</p>
+                              <p>Détails: {appointment.prestation_id.name}</p>
                             </AlertDialogDescription>
                             <AlertDialogFooter>
-                              <Button variant="destructive" onClick={() => handleDeleteAppointment(appointment.id)}>Supprimer</Button>
+                              <Button variant="destructive" onClick={() => deleteAppointment(appointment._id)}>Supprimer</Button>
                               <Button variant="outline" onClick={() => handleEditAppointment(appointment)}>Modifier</Button>
                               <AlertDialogCancel onClick={() => setSelectedAppointment(null)}>Fermer</AlertDialogCancel>
                             </AlertDialogFooter>
@@ -214,31 +188,76 @@ export default function RendezVous() {
           <DialogHeader>
             <DialogTitle>{isEditMode ? 'Modifier le rendez-vous' : 'Ajouter un rendez-vous'}</DialogTitle>
           </DialogHeader>
+          {addError && <p className="text-red-500">{addError}</p>}
+          {fetchError && <p className="text-red-500">{fetchError}</p>}
+          {fetchUsersError && <p className="text-red-500">{fetchUsersError}</p>}
+          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={isPopoverOpen}
+                className="w-full justify-between mb-4"
+              >
+                {selectedUser
+                  ? users.find(user => user._id === selectedUser)?.nom + ' ' + users.find(user => user._id === selectedUser)?.prenom
+                  : "Sélectionner un utilisateur..."}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0">
+              <Command>
+                <CommandInput
+                  placeholder="Rechercher un utilisateur..."
+                  value={searchTerm}
+                  onValueChange={(value) => setSearchTerm(value)}
+                  aria-label="Rechercher un utilisateur"
+                />
+                <CommandEmpty>Aucun utilisateur trouvé.</CommandEmpty>
+                <CommandList>
+                  <CommandGroup>
+                    {filteredUsers.map((user) => (
+                      <CommandItem
+                        key={user._id}
+                        value={user._id}
+                        onSelect={() => handleUserSelect(user._id)}
+                      >
+                        <Check
+                          className={`mr-2 h-4 w-4 ${selectedUser === user._id ? "opacity-100" : "opacity-0"}`}
+                        />
+                        {user.nom} {user.prenom}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
           <Input
             placeholder="Nom"
-            value={newAppointment.name}
-            onChange={(e) => setNewAppointment({ ...newAppointment, name: e.target.value })}
+            value={newAppointment.user_id.nom}
+            onChange={(e) => setNewAppointment({ ...newAppointment, user_id: { ...newAppointment.user_id, nom: e.target.value } })}
             aria-label="Nom du rendez-vous"
             className="mb-4"
           />
           <Input
             placeholder="Prénom"
-            value={newAppointment.prenom}
-            onChange={(e) => setNewAppointment({ ...newAppointment, prenom: e.target.value })}
+            value={newAppointment.user_id.prenom}
+            onChange={(e) => setNewAppointment({ ...newAppointment, user_id: { ...newAppointment.user_id, prenom: e.target.value } })}
             aria-label="Prénom du rendez-vous"
             className="mb-4"
           />
           <Input
             placeholder="Email"
-            value={newAppointment.email}
-            onChange={(e) => setNewAppointment({ ...newAppointment, email: e.target.value })}
+            value={newAppointment.user_id.email}
+            onChange={(e) => setNewAppointment({ ...newAppointment, user_id: { ...newAppointment.user_id, email: e.target.value } })}
             aria-label="Email du rendez-vous"
             className="mb-4"
           />
           <Input
             placeholder="Téléphone"
-            value={newAppointment.phone}
-            onChange={(e) => setNewAppointment({ ...newAppointment, phone: e.target.value })}
+            value={newAppointment.user_id.mobile}
+            onChange={(e) => setNewAppointment({ ...newAppointment, user_id: { ...newAppointment.user_id, mobile: e.target.value } })}
             aria-label="Téléphone du rendez-vous"
             className="mb-4"
           />
@@ -259,15 +278,15 @@ export default function RendezVous() {
             className="mb-4"
           />
           <Select
-            value={newAppointment.prestation}
-            onValueChange={(value) => setNewAppointment({ ...newAppointment, prestation: value })}
+            value={newAppointment.prestationId}
+            onValueChange={(value) => setNewAppointment({ ...newAppointment, prestationId: value })}
           >
             <SelectTrigger className="bg-secondary-25">
               <SelectValue placeholder="Choisir une prestation" />
             </SelectTrigger>
             <SelectContent>
               {prestations.map((prestation) => (
-                <SelectItem key={prestation._id} value={prestation.name}>
+                <SelectItem key={prestation._id} value={prestation._id}>
                   {prestation.name}
                 </SelectItem>
               ))}

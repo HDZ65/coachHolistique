@@ -32,9 +32,9 @@ export default function Prestations() {
     }, []);
 
     return (
-        <Tabs defaultValue="all" className="">
-            <TabsContent value="all" className="mt-0">
-                <Card className="" x-chunk="dashboard-06-chunk-0">
+        <Tabs defaultValue="all" className="w-full h-full">
+            <TabsContent value="all" className="mt-0 w-full h-full">
+                <Card className=" w-full h-full" x-chunk="dashboard-06-chunk-0">
                     <CardHeader className="">
                         <div className="flex justify-between items-center">
                             <CardTitle className=""> Prestations</CardTitle>

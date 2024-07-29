@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 import { fontMontaga } from './../../fonts';
 
 
-import { ButtonRendezVous } from '../RendezVous/ButtonRendezVous';
+import { ButtonRendezVous } from '../ButtonRendezVous/ButtonRendezVous';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const NavBar: React.FC = () => {

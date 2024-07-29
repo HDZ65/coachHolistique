@@ -6,7 +6,9 @@ import Prestation from "@/lib/models/prestations"; // Correction de l'importatio
 
 // Ce fichier gère les requêtes GET, POST, DELETE et PUT pour les rendez-vous.
 
+// Interface pour les données du rendez-vous
 export interface AppointmentData {
+    _id: string;
     nom: string;
     prenom: string;
     email: string;
@@ -18,6 +20,7 @@ export interface AppointmentData {
         duration: string;
     }
     date: string; 
+    time: string;
     user_id: {
         nom: string;
         prenom: string;
@@ -26,6 +29,7 @@ export interface AppointmentData {
     }
 }
 
+// Validation des données du rendez-vous
 function validateAppointmentData(data: AppointmentData): { isValid: boolean, errors: string[] } {
     const errors = [];
     if (!data.nom) errors.push("Le champ 'nom' est requis.");
@@ -34,6 +38,7 @@ function validateAppointmentData(data: AppointmentData): { isValid: boolean, err
     if (!data.mobile) errors.push("Le champ 'mobile' est requis.");
     if (!data.prestationId) errors.push("Le champ 'prestationId' est requis.");
     if (!data.date) errors.push("Le champ 'date' est requis.");
+    if (!data.time) errors.push("Le champ 'heure' est requis."); 
     return {
         isValid: errors.length === 0,
         errors
@@ -44,8 +49,18 @@ function validateAppointmentData(data: AppointmentData): { isValid: boolean, err
 export async function GET(req: NextRequest) {
     await connect();
     try {
-        const appointments = await Appointment.find({}).populate('prestation_id', 'name').populate('user_id', 'nom prenom email mobile');
-        return NextResponse.json({ appointments });
+        const appointments = await Appointment.find({})
+            .populate('prestation_id', 'name')
+            .populate('user_id', 'nom prenom email mobile');
+
+        // Transformation des données pour séparer la date et l'heure
+        const transformedAppointments = appointments.map(appointment => ({
+            ...appointment.toObject(),
+            date: appointment.date.toISOString().split('T')[0], // Extraction de la date
+            time: appointment.time // Heure déjà séparée
+        }));
+
+        return NextResponse.json({ appointments: transformedAppointments });
     } catch (error) {
         console.error("Erreur lors de la récupération des rendez-vous:", error as Error);
         return NextResponse.json({ message: "Oups! Quelque chose s'est mal passé. Essayez de nouveau plus tard.", error: (error as Error).message }, { status: 500 });
@@ -93,7 +108,8 @@ export async function POST(req: NextRequest) {
         // Vérification de l'unicité du rendez-vous pour l'utilisateur à la même date et heure
         const existingAppointment = await Appointment.findOne({
             user_id: user._id,
-            date: new Date(appointmentData.date)
+            date: new Date(appointmentData.date),
+            time: appointmentData.time // Ajout de la vérification de l'heure
         });
 
         if (existingAppointment) {
@@ -106,6 +122,7 @@ export async function POST(req: NextRequest) {
         const newAppointment = new Appointment({
             prestation_id: appointmentData.prestationId,
             date: new Date(appointmentData.date),
+            time: appointmentData.time, // Ajout de l'heure
             user_id: user._id
         });
 
@@ -153,7 +170,13 @@ export async function PUT(req: NextRequest) {
             }, { status: 400 });
         }
 
-        const updatedAppointment = await Appointment.findByIdAndUpdate(id, appointmentData, { new: true });
+        const updatedAppointment = await Appointment.findByIdAndUpdate(id, {
+            prestation_id: appointmentData.prestationId,
+            date: new Date(appointmentData.date),
+            time: appointmentData.time, // Ajout de l'heure
+            user_id: appointmentData.user_id
+        }, { new: true });
+
         if (!updatedAppointment) {
             return NextResponse.json({ error: "Rendez-vous non trouvé. Essayez avec un autre ID!" }, { status: 404 });
         }

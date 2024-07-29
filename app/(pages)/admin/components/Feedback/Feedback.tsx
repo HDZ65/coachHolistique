@@ -25,7 +25,7 @@ export default function Feedback() {
     }, []);
 
     return (
-        <Card className="w-fit" role="region" aria-labelledby="feedback-title">
+        <Card className="" role="region" aria-labelledby="feedback-title">
             <CardHeader>
                 <CardTitle id="feedback-title">
                     Avis clients

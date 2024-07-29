@@ -8,12 +8,12 @@ import { useSalesFunnel } from "../context/SalesFunnelContext";
 import { useState } from "react";
 
 export default function Congratulation() {
-    const { prestationId, dateTime, userInfo, prestationDetails } = useSalesFunnel();
+    const { prestationId, date, time, userInfo, prestationDetails } = useSalesFunnel();
     const [feedback, setFeedback] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState("");
 
-    if (!prestationId || !dateTime || !userInfo || !prestationDetails) {
+    if (!prestationId || !date || !time || !userInfo || !prestationDetails) {
         return <p>Erreur: Informations manquantes pour le rendez-vous.</p>;
     }
 
@@ -50,7 +50,7 @@ export default function Congratulation() {
             </CardHeader>
             <CardContent className="py-0">
                 <p className="text-md">
-                    Votre rendez-vous pour une <strong>{prestationDetails.name}</strong> a bien été pris en compte pour le <strong>{new Date(dateTime).toLocaleDateString()}</strong> à <strong>{new Date(dateTime).toLocaleTimeString()}</strong>
+                    Votre rendez-vous pour une <strong>{prestationDetails.name}</strong> a bien été pris en compte pour le <strong>{new Date(date).toLocaleDateString()}</strong> à <strong>{time}</strong>
                 </p>
                 {!submitted ? (
                     <form onSubmit={handleSubmit} className="mt-4">

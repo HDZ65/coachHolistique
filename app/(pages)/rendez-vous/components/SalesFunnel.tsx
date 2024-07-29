@@ -10,7 +10,7 @@ import Congratulation from './Congratulation';
 
 export default function SalesFunnel() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [paymentSuccess, setPaymentSuccess] = useState(false); // Nouvel état pour le succès du paiement
+  const [paymentSuccess, setPaymentSuccess] = useState(false); 
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => prev - 1);
@@ -19,7 +19,7 @@ export default function SalesFunnel() {
     { component: <PrestationsForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />, key: 1 },
     { component: <CalendarForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />, key: 2 },
     { component: <InputForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />, key: 3 },
-    { component: <PaymentForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} setPaymentSuccess={setPaymentSuccess} />, key: 4 }, // Passer setPaymentSuccess
+    { component: <PaymentForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} setPaymentSuccess={setPaymentSuccess} />, key: 4 }, 
     { component: <Congratulation/>, key: 5 },
   ];
 
