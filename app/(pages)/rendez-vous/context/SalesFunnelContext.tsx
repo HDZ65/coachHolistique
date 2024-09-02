@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios'; // Importer axios pour les requêtes HTTP
-import { formatISO, parseISO } from 'date-fns'; // Importer date-fns pour la gestion des dates
+
 
 // Interface pour les propriétés du contexte SalesFunnel
 interface SalesFunnelContextProps {

@@ -19,7 +19,7 @@ export default function SalesFunnel() {
     { component: <PrestationsForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />, key: 1 },
     { component: <CalendarForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />, key: 2 },
     { component: <InputForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />, key: 3 },
-    { component: <PaymentForm currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} setPaymentSuccess={setPaymentSuccess} />, key: 4 }, 
+    { component: <PaymentForm currentStep={currentStep}  prevStep={prevStep} setPaymentSuccess={setPaymentSuccess} />, key: 4 }, 
     { component: <Congratulation/>, key: 5 },
   ];
 

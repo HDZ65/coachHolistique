@@ -1,47 +1,34 @@
 'use client'
 
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { FeedbackData } from "@/app/api/feedback/route";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useFetchFeedback } from '@/app/hooks/useFetchFeedback';
 
-// Composant Feedback pour afficher les avis clients
+
 export default function Feedback() {
-    const [feedback, setFeedback] = useState<FeedbackData[]>([]);
-    const [error, setError] = useState<string | null>(null);
-
-    const fetchFeedback = async () => {
-        try {
-            const res = await fetch("/api/feedback");
-            const data = await res.json();
-            setFeedback(data.feedback || []);
-        } catch (error) {
-            setError("Erreur lors de la récupération des avis");
-        }
-    }
-
-    useEffect(() => {
-        fetchFeedback();
-    }, []);
+    const { feedback, error } = useFetchFeedback();
 
     return (
-        <Card className="" role="region" aria-labelledby="feedback-title">
+        <Card className="h-full" role="region" aria-labelledby="feedback-title">
             <CardHeader>
                 <CardTitle id="feedback-title">
                     Avis clients
                 </CardTitle>
-                <CardContent className="px-0 pb-0">
-                    {error ? (
-                        <p>{error}</p>
-                    ) : (
-                        <ul>
-                            {feedback.map((feedback) => (
-                                <li className="list-disc list-inside" key={feedback._id}>{feedback.message}</li>
-                            ))}
-                        </ul>
-                    )}
-                </CardContent>
             </CardHeader>
+            <CardContent className="px-6 pb-0 overflow-y-auto h-52">
+                {error ? (
+                    <p role="alert" aria-live="assertive">{error}</p>
+                ) : feedback.length > 0 ? (
+                    <ul>
+                        {feedback.map((item) => (
+                            <li className="list-disc list-inside mb-2" key={item._id}>
+                                {item.message}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>Aucun avis pour le moment</p>
+                )}
+            </CardContent>
         </Card>
     )
 }

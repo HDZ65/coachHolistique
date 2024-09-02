@@ -2,21 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'; // Importation des type
 import client from '@/utils/paypal'; // Importation du client PayPal personnalisé
 import paypal from '@paypal/checkout-server-sdk'; // Importation du SDK PayPal
 import Order from '@/lib/models/order'; // Importation du modèle Order
-import connect from './../../../../lib/mongodb';
-
+import connect from '@/lib/mongodb'; // Mise à jour de l'import
 
 // Handler pour récupérer les détails d'une commande PayPal
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url); // Extraction des paramètres de recherche de l'URL
-  const orderId = searchParams.get('orderId'); // Récupération du paramètre orderId
-
-  // Vérification des paramètres requis
-  if (!orderId) {
-    return NextResponse.json({ success: false, message: 'Veuillez fournir l\'ID de la commande' }, { status: 400 }); // Réponse d'erreur si orderId est manquant
-  }
-
   try {
-    await connect(); // Connexion à la base de données
+    await connect(); // Utilisation de la nouvelle fonction connect
+    const { searchParams } = new URL(request.url); // Extraction des paramètres de recherche de l'URL
+    const orderId = searchParams.get('orderId'); // Récupération du paramètre orderId
+
+    // Vérification des paramètres requis
+    if (!orderId) {
+      return NextResponse.json({ success: false, message: 'Veuillez fournir l\'ID de la commande' }, { status: 400 }); // Réponse d'erreur si orderId est manquant
+    }
 
     const order = await Order.findOne({ orderId }); // Recherche de la commande par orderId
     if (!order) {
@@ -29,18 +27,16 @@ export async function GET(request: NextRequest) {
   }
 }
 
-
 // Handler pour capturer une commande PayPal
 export async function POST(request: NextRequest) {
-  const { orderID } = await request.json(); // Extraction du paramètre orderID de la requête
-
-  // Vérification des paramètres requis
-  if (!orderID) {
-    return NextResponse.json({ success: false, message: 'Veuillez fournir l\'ID de la commande' }, { status: 400 }); // Réponse d'erreur si orderID est manquant
-  }
-
   try {
-    await connect(); // Connexion à la base de données
+    await connect(); // Utilisation de la nouvelle fonction connect
+    const { orderID } = await request.json(); // Extraction du paramètre orderID de la requête
+
+    // Vérification des paramètres requis
+    if (!orderID) {
+      return NextResponse.json({ success: false, message: 'Veuillez fournir l\'ID de la commande' }, { status: 400 }); // Réponse d'erreur si orderID est manquant
+    }
 
     const PaypalClient = client(); // Initialisation du client PayPal
     const paypalRequest = new paypal.orders.OrdersCaptureRequest(orderID); // Création d'une nouvelle requête de capture de commande PayPal

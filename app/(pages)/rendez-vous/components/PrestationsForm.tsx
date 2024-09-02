@@ -46,7 +46,7 @@ export default function PrestationsForm({ currentStep, nextStep, prevStep }: { c
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <RadioGroup className="grid sm:grid-cols-3 gap-6" role="radiogroup" aria-labelledby="prestation-selection">
+        <RadioGroup className="grid sm:grid-cols-2 gap-6" role="radiogroup" aria-labelledby="prestation-selection">
           {Array.isArray(prestations) && prestations.map((item) => (
             <div key={item._id} className="flex items-center w-full">
               <Label className="w-full" htmlFor={item._id}>

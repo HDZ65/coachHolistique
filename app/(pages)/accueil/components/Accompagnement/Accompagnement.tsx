@@ -1,18 +1,15 @@
 'use client'
 import React from "react";
-import { Button } from "@/components/ui/button"
 import CardCoaching from '../../../../components/CardCoaching/CardCoaching';
-import { BsInfo } from "react-icons/bs";
 import Link from "next/link";
-import { ButtonRendezVous } from "@/app/components/RendezVous/ButtonRendezVous";
 
 const Accompagnement = React.memo(function Accompagnement() {
   return (
     <section className='flex flex-col m-auto gap-10 text-center maxW-7xl items-center justify-center  text-foor-1000'>
       <article className="flex flex-col items-center  gap-4">
-        <h2 className={`text-4xl md:text-5xl text-secondary`}>Accompagnement</h2>
+        <h2 className={`text-4xl  text-secondary`}>Accompagnement Holistique</h2>
         <Link href="/coaching" className='textLg text-muted hover:text-primary underline'>
-          Comment se déroule le coaching ?</Link>
+          Qu&rsquo;est ce que le coaching holistique ?</Link>
         <p className='text-center  text-foreground md:w-4/5 mx-auto'>
           Embarquez pour un <strong>accompagnement</strong> dans votre voyage de <strong>coaching holistique</strong> profond. Ensemble, nous dénouerons les nœuds qui entravent votre <strong>confiance en soi</strong> et aborderons les <strong>défis quotidiens</strong> qui vous empêchent d&rsquo;atteindre vos <strong>objectifs</strong>.
         </p>
@@ -50,13 +47,6 @@ const Accompagnement = React.memo(function Accompagnement() {
           </svg>
         </CardCoaching>
       </article>
-      <div className="grid grid-cols-2 md:flex-row max-[350px]:gap-2 gap-4 w-full">
-        <Button variant="outline">
-          <BsInfo className='mr-2 textLg' aria-hidden="true" />
-          En savoir plus
-        </Button>
-        <ButtonRendezVous/>
-      </div>
     </section>
   );
 });

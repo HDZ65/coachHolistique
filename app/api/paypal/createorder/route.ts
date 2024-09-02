@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'; // Importation des type
 import client from '@/utils/paypal'; // Importation du client PayPal personnalisé
 import paypal from '@paypal/checkout-server-sdk'; // Importation du SDK PayPal
 import Prestation from '@/lib/models/prestations'; // Importation du modèle Prestation
-import connect from './../../../../lib/mongodb';
+import connect from '@/lib/mongodb'; // Mise à jour de l'import
 
 // Handler pour créer une commande PayPal
 export async function POST(request: NextRequest) {
   try {
-    await connect(); // Connexion à la base de données
+    await connect(); // Utilisation de la nouvelle fonction connect
     console.log('Connexion à la base de données réussie'); // Log de la connexion réussie
 
     const { prestationId, user_id } = await request.json(); // Extraction des paramètres prestationId et user_id de la requête

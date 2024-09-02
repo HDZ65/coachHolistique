@@ -41,7 +41,7 @@ export function FormulaireContact() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3 w-full ">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full ">
                 <FormField
                     control={form.control}
                     name="nomComplet"

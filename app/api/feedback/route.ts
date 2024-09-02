@@ -2,7 +2,7 @@
 // Ce fichier gère les requêtes GET et POST pour les avis.
 
 import Feedback from "@/lib/models/feedback";
-import connect from "../../../lib/mongodb";
+import connect from "@/lib/mongodb"; // Mise à jour de l'import
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
@@ -16,8 +16,8 @@ export interface FeedbackData {
 
 // Cette fonction gère les requêtes GET pour récupérer les avis.
 export async function GET(req: NextRequest, res: NextResponse) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const feedback = await Feedback.find();
         return NextResponse.json({ feedback });
     } catch (error) {
@@ -28,8 +28,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 // Cette fonction gère les requêtes POST pour créer un nouvel avis.
 export async function POST(req: NextRequest, res: NextResponse) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { message }: FeedbackData = await req.json();
 
         if (!message || typeof message !== 'string') {

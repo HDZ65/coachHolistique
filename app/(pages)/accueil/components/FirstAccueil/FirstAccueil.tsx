@@ -5,7 +5,7 @@ import React from 'react';
 import Image from 'next/image';
 import dune from './../../../../../public/dune.jpg';
 import ButtonContact from '@/app/components/ButtonContact/ButtonContact';
-import { ButtonRendezVous } from '@/app/components/RendezVous/ButtonRendezVous';
+import { ButtonRendezVous } from './../../../../components/ButtonRendezVous/ButtonRendezVous';
 
 const FirstAccueil = React.memo(function FirstAccueil() {
     return (
@@ -19,14 +19,14 @@ const FirstAccueil = React.memo(function FirstAccueil() {
                     Elisabeth, coach holistique
                 </h1>
                 <h2 className="md:text-5xl z-30 text-5xl drop-shadow-[0_0_1px_rgba(100,100,100,0.1)]">
-                    Atteignez l&apos;Équilibre et la Sérénité intérieure
+                Transformez Votre Vie avec des Solutions Complètes et Personnalisées
                 </h2>
                 <p className={`rounded-full text-border bg-background px-2 z-30 ${fontMontaga.className}`}>
                     - Soin holistique
                 </p>
                 <div className="flex flex-col gap-3 w-full">
                     <ButtonContact />
-                    <ButtonRendezVous />
+                    <ButtonRendezVous className="w-full" />
 
                 </div>
             </article>
@@ -36,9 +36,9 @@ const FirstAccueil = React.memo(function FirstAccueil() {
                         className="kenburns-top h-full w-full object-cover rounded-xl z-10"
                         src={dune}
                         alt="Image d'accueil Elisabeth coach holistique"
-                        width={500} // Définir la largeur
-                        height={500} // Définir la hauteur
-                        priority
+                        width={800} 
+                        height={800} 
+                        priority 
                     />
                 </div>
             </article>

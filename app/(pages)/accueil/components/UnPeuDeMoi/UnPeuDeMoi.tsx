@@ -23,16 +23,20 @@ const UnPeuDeMoi = () => {
                         </svg>
                     </div>
                     <div className="flex flex-col gap-3">
+                        <p>Je suis Elisabeth, thérapeute, coach holistique et pratricienne en EFT.</p>
                         <p>
-                            Je suis <strong>Elisabeth</strong>, <strong>coach holistique</strong> et <strong>intuitive</strong>. Dès mon jeune âge, je me suis intéressée à la <strong>cartomancie</strong> et au monde <strong>ésotérique</strong>. En 2018, j&apos;ai approfondi mes connaissances en <strong>soins Reiki</strong> et en <strong>loi de l&apos;attraction</strong>, renforçant mon désir d&apos;aider et de partager.
+                            Depuis plusieurs années, j&apos;ai approfondi mes connaissances et affiné mes compétences à travers divers stages et formations, dans le domaine du spirituel et du développement personnel.
                         </p>
                         <div className="mx-auto w-short-divider border-b border-secondary"></div>
                         <p>
-                            Depuis lors, je n&apos;ai cessé d&apos;approfondir mes connaissances et d&apos;affiner mes compétences au travers de divers <strong>stages</strong>, <strong>formations</strong>, et <strong>Masterclass</strong>, dans le domaine de la <strong>spiritualité</strong> mais aussi de l&apos;<strong>accompagnement</strong>. J&apos;ai également eu le privilège d&apos;étudier les travaux de nombreux <strong>spécialistes</strong> et <strong>mentors renommés</strong>, enrichissant ainsi ma pratique et ma compréhension de ce vaste univers.
+                        D&apos;aussi loin que je me souvienne, l&apos;ésotérisme, la cartomancie, la compréhension et l&apos;approche du monde invisible ont toujours fait partie de mon univers. C&apos;est en 2018, où je me suis formée au reiki, que tout a pris un réel sens pour moi. 
                         </p>
                         <div className="left-0 right-0 mx-auto w-short-divider border-b border-secondary"></div>
                         <p>
-                            Ayant moi-même mis en pratique les enseignements de ces figures emblématiques, je suis déterminée à vous accompagner dans votre propre voyage de <strong>croissance</strong> et de <strong>transformation</strong>.
+                        J&apos;ai alors donc pris l&apos;initiative de me former auprès de nombreux spécialistes et étudié les travaux de mentors renommés. Je ne cesse jusqu&apos;à ce jour d&apos;apprendre les différentes techniques d&apos;approches de l&apos;être humain, dont dernièrement un premier niveau sur le décodage biologique et la psychogénéalogie.
+                        </p>
+                        <p>
+                        Ayant moi-même mis en pratique ces enseignements dans ma vie personnelle, mon rôle aujourd&apos;hui est d&apos;accompagner à mon tour les personnes désireuses de voir le changement positif dans leur vie.
                         </p>
                     </div>
                 </article>

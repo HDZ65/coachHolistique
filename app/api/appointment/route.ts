@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 import Appointment from "@/lib/models/appointment";
 import User from "@/lib/models/users";
-import connect from "../../../lib/mongodb";
-import Prestation from "@/lib/models/prestations"; // Correction de l'importation
+import connect from "@/lib/mongodb"; // Mise à jour de l'import
+import Prestation from "@/lib/models/prestations"; // Correction de l'import
 
 // Ce fichier gère les requêtes GET, POST, DELETE et PUT pour les rendez-vous.
 
@@ -47,10 +47,10 @@ function validateAppointmentData(data: AppointmentData): { isValid: boolean, err
 
 // Récupère tous les rendez-vous
 export async function GET(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const appointments = await Appointment.find({})
-            .populate('prestation_id', 'name')
+            .populate('prestation_id', 'name') 
             .populate('user_id', 'nom prenom email mobile');
 
         // Transformation des données pour séparer la date et l'heure
@@ -69,8 +69,8 @@ export async function GET(req: NextRequest) {
 
 // Création d'un nouveau rendez-vous
 export async function POST(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const appointmentData: AppointmentData = await req.json();
 
         // Journalisation des données reçues
@@ -132,8 +132,8 @@ export async function POST(req: NextRequest) {
         await newAppointment.save();
 
         return NextResponse.json({ message: "Votre rendez-vous a bien été pris en compte ! Préparez-vous pour une expérience incroyable!", newAppointment }, { status: 201 });
-    } catch (error) {
-        const typedError = error as any; // Utilisation de 'any' pour contourner le problème de typage
+    } catch (error: any) {
+        const typedError = error ; // Utilisation de 'any' pour contourner le problème de typage
         console.error("Erreur lors de la création du rendez-vous:", typedError);
         if (typedError.name === 'MongoError' && typedError.code === 11000) {
             return NextResponse.json({ error: "Un rendez-vous existe déjà à cette date et heure. Essayez une autre date!" }, { status: 409 });
@@ -144,8 +144,8 @@ export async function POST(req: NextRequest) {
 
 // Suppression d'un rendez-vous
 export async function DELETE(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { id } = await req.json() as { id: string };
         await Appointment.findByIdAndDelete(id);
         return NextResponse.json({ message: "Rendez-vous supprimé avec succès! Espérons que ce n'était pas trop important." });
@@ -158,8 +158,8 @@ export async function DELETE(req: NextRequest) {
 
 // Mise à jour d'un rendez-vous
 export async function PUT(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { id, appointmentData } = await req.json() as { id: string, appointmentData: AppointmentData };
         const { isValid, errors } = validateAppointmentData(appointmentData);
 

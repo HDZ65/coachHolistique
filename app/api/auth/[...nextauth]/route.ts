@@ -1,9 +1,11 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions } from "next-auth";
 
-// Authentification pour l'admin
+// Titre principal : Configuration de l'authentification NextAuth.js
 
-export const authOptions = {
+// Configuration de l'authentification pour l'admin
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -16,7 +18,7 @@ export const authOptions = {
           return null;
         }
 
-        const user = { id: "1", name: process.env.NAME, email: "user@example.com" };
+        const user = { id: "1", name: process.env.NAME };
 
         if (credentials.username === process.env.NAME && credentials.password === process.env.PASSWORD) {
           return user;
@@ -26,7 +28,18 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET || process.env.SECRET,
+  pages: {
+    signIn: "/auth/signin",
+  },
+  callbacks: {
+    async session({ session, token, user }) {
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

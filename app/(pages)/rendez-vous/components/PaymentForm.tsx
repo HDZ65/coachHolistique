@@ -2,9 +2,7 @@ import { Card, CardHeader, CardContent, CardFooter, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import PaypalButton from './PaypalButton';
 
-
 export default function PaymentForm({ currentStep, prevStep, setPaymentSuccess }: { currentStep: number, prevStep: () => void, setPaymentSuccess: (success: boolean) => void }) {
-
 
   return (
     <Card className="flex flex-col lg:w-fit m-auto lg:px-6" role="form" aria-labelledby="payment-form-title">

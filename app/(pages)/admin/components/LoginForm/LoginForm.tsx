@@ -4,7 +4,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import {
     Card,
@@ -14,9 +13,12 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { useAdminSession } from '../../context/AdminSessionContext';
 
 // Fonction LoginForm : Gère le formulaire de connexion
 const LoginForm = () => {
+    const { signIn } = useAdminSession();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -30,7 +32,7 @@ const LoginForm = () => {
             password,
         });
 
-        if (result?.error) {
+        if (typeof result === 'object' && result !== null && 'error' in result) {
             setError("Nom d'utilisateur ou mot de passe incorrect");
         } else {
             setError("");

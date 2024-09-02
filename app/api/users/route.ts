@@ -1,5 +1,5 @@
 import User from "@/lib/models/users";
-import connect from "../../../lib/mongodb";
+import connect from "@/lib/mongodb"; // Mise à jour de l'import
 import { NextRequest, NextResponse } from "next/server";
 
 // Titre: Gestion des routes pour les utilisateurs
@@ -27,11 +27,33 @@ function validateUserData(data: UserData): { isValid: boolean, errors: string[] 
     };
 }
 
+// Fonction pour convertir la chaîne de tri en SortOrder
+const getSortOrder = (order: string): 1 | -1 => order === 'desc' ? -1 : 1;
+
 // Récupère tous les utilisateurs
 export async function GET(req: NextRequest) {
-    await connect();
     try {
-        const users = await User.find({});
+        await connect();
+        const { searchParams } = new URL(req.url);
+        const sortOrder = searchParams.get('sortOrder') || 'asc';
+        const limit = parseInt(searchParams.get('limit') || '0');
+
+        let users = await User.find({}).lean();
+
+        // Tri personnalisé
+        users.sort((a, b) => {
+            const fullNameA = `${a.nom} ${a.prenom}`.toLowerCase();
+            const fullNameB = `${b.nom} ${b.prenom}`.toLowerCase();
+            return sortOrder === 'asc' ? 
+                fullNameA.localeCompare(fullNameB) : 
+                fullNameB.localeCompare(fullNameA);
+        });
+
+        // Appliquer la limite si spécifiée
+        if (limit > 0) {
+            users = users.slice(0, limit);
+        }
+
         return NextResponse.json({ users });
     } catch (error) {
         console.error("Erreur lors de la récupération des utilisateurs:", error);
@@ -41,9 +63,8 @@ export async function GET(req: NextRequest) {
 
 // Création d'un nouvel utilisateur
 export async function POST(req: NextRequest) {
-    await connect();
-
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const userData: UserData = await req.json();
         const { isValid, errors } = validateUserData(userData);
 
@@ -68,8 +89,8 @@ export async function POST(req: NextRequest) {
 
 // Mise à jour d'un utilisateur
 export async function PUT(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { id, userData } = await req.json() as { id: string, userData: UserData };
         const { isValid, errors } = validateUserData(userData);
 
@@ -95,8 +116,8 @@ export async function PUT(req: NextRequest) {
 
 // Suppression d'un utilisateur
 export async function DELETE(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { id } = await req.json() as { id: string };
         await User.findByIdAndDelete(id);
         return NextResponse.json({ message: "Utilisateur supprimé" });

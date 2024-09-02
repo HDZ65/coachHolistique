@@ -1,5 +1,6 @@
 import ButtonContact from "@/app/components/ButtonContact/ButtonContact";
-import { ButtonRendezVous } from "@/app/components/RendezVous/ButtonRendezVous";
+import { ButtonRendezVous } from './../../../../components/ButtonRendezVous/ButtonRendezVous';
+
 import { fontEphesis, fontMontaga } from "@/app/fonts";
 export default function Header() {
   return (
@@ -16,7 +17,7 @@ export default function Header() {
                 </p>
                 <section className="flex flex-col gap-3 w-full">
                     <ButtonContact />
-                    <ButtonRendezVous />
+                    <ButtonRendezVous className="w-full" />
                 </section>
         </section>
   )

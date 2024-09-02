@@ -1,6 +1,6 @@
 import NewsLetter from "@/lib/models/newsLetter";
 import User from "@/lib/models/users";
-import connect from "../../../lib/mongodb";
+import connect from "@/lib/mongodb"; // Mise à jour de l'import
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
@@ -30,8 +30,8 @@ function validateNewsletterData(data: NewsletterData): { isValid: boolean, error
 
 // Récupère tous les abonnés à la newsletter
 export async function GET(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const newsLetter = await NewsLetter.find({}).populate('user_id', 'email prenom');
         return NextResponse.json({ newsLetter });
     } catch (error) {
@@ -42,9 +42,8 @@ export async function GET(req: NextRequest) {
 
 // Inscription à la newsletter
 export async function POST(req: NextRequest) {
-    await connect();  // Connexion à MongoDB
-
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { email, prenom }: NewsletterData = await req.json();
         const { isValid, errors } = validateNewsletterData({ email, prenom });
 

@@ -67,8 +67,9 @@ export function CarouselEbook() {
   ]
 
   return (
-    <div>
-      <Carousel setApi={setApi} className="max-sm:w-3/4 max-md:w-10/12 mx-auto z-50 md:w-full h-full max-w-md">
+    <div className='w-full'>
+      <Carousel setApi={setApi} className=" max-md:min-w-full flex justify-center items-center gap-6 max-sm:w-3/4 max-md:w-10/12 mx-auto z-50 md:w-full h-full max-w-md">
+        <CarouselPrevious />
         <CarouselContent>
           {images.map((image) => (
             <CarouselItem key={image.id}>
@@ -80,7 +81,6 @@ export function CarouselEbook() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
         <CarouselNext />
       </Carousel>
       <div className="py-2 text-center text-sm text-muted-foreground">

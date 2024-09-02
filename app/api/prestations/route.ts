@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import Prestation from "@/lib/models/prestations";
-import connect from "../../../lib/mongodb";
+import connect from "@/lib/mongodb";
 
 // Ce fichier gère les requêtes GET, POST, PUT et DELETE pour les prestations.
 
@@ -40,8 +40,8 @@ function validatePrestationsData(data: PrestationsData) {
 
 // Récupère toutes les prestations
 export async function GET(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilise la connexion optimisée
         const prestations = await Prestation.find({});
         return NextResponse.json({ prestations });
     } catch (error) {
@@ -52,8 +52,8 @@ export async function GET(req: NextRequest) {
 
 // Création d'une nouvelle prestation
 export async function POST(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilise la connexion optimisée
         const prestationData = await req.json();
         const newPrestation = new Prestation(prestationData);
         const errors = validatePrestationsData(newPrestation);
@@ -70,8 +70,8 @@ export async function POST(req: NextRequest) {
 
 // Mise à jour d'une prestation
 export async function PUT(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilise la connexion optimisée
         const { id, prestationData } = await req.json();
         const updatedPrestation = await Prestation.findByIdAndUpdate(id, prestationData, { new: true });
         if (!updatedPrestation) {
@@ -86,8 +86,8 @@ export async function PUT(req: NextRequest) {
 
 // Suppression d'une prestation
 export async function DELETE(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilise la connexion optimisée
         const { id } = await req.json();
         const deletedPrestation = await Prestation.findByIdAndDelete(id);
         if (!deletedPrestation) {

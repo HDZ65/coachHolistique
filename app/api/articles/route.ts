@@ -2,7 +2,7 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import articles from "@/lib/models/articles";
-import connect from "../../../lib/mongodb";
+import connect from "@/lib/mongodb"; // Mise à jour de l'import
 
 // Titre: Gestion des routes pour les articles
 // Ce fichier gère les requêtes GET, POST, DELETE et PUT pour les articles.
@@ -49,8 +49,8 @@ function validateArticlesData(data: ArticlesData): { isValid: boolean, errors: s
 
 // Fonction GET pour récupérer tous les articles
 export async function GET(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const articlesList = await articles.find({});
         console.log("Articles récupérés:", articlesList); // Ajout de log
         return NextResponse.json({ articles: articlesList });
@@ -62,8 +62,8 @@ export async function GET(req: NextRequest) {
 
 // Fonction POST pour créer un nouvel article
 export async function POST(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const articleData: ArticlesData = await req.json();
         const { isValid, errors } = validateArticlesData(articleData);
 
@@ -94,8 +94,8 @@ export async function POST(req: NextRequest) {
 
 // Fonction DELETE pour supprimer un article
 export async function DELETE(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { id } = await req.json() as { id: string };
         await articles.findByIdAndDelete(id);
         return NextResponse.json({ message: "Article supprimé avec succès! Espérons que ce n'était pas votre préféré." });
@@ -108,8 +108,8 @@ export async function DELETE(req: NextRequest) {
 
 // Fonction PUT pour mettre à jour un article
 export async function PUT(req: NextRequest) {
-    await connect();
     try {
+        await connect(); // Utilisation de la nouvelle fonction connect
         const { id, articleData } = await req.json() as { id: string, articleData: ArticlesData };
         const { isValid, errors } = validateArticlesData(articleData);
 
