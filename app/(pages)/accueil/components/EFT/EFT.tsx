@@ -10,9 +10,9 @@ const EFT = React.memo(function EFT() {
   return (
     <section className='flex flex-col m-auto gap-10 text-center maxW-7xl items-center justify-center  text-foor-1000'>
       <article className="flex flex-col items-star  gap-4">
-        <h2 className={`text-4xl text-secondary`}>Séance d&rsquo;EFT</h2>
+        <h2 className={`text-4xl text-secondary`}>EFT ou Tapping</h2>
         <Link href="/eft-tapping" className='textLg text-muted hover:text-primary underline'>
-          Qu&rsquo;est ce que l&rsquo;EFT ?</Link>
+          Qu&rsquo;est ce que l&rsquo;EFT ou Tapping ?</Link>
         <p className='text-center  text-foreground md:w-4/5 mx-auto'>
         L&rsquo;EFT, ou Emotional Freedom Techniques (Techniques de Libération Émotionnelle), est une méthode de gestion des émotions et des douleurs physiques qui combine la psychologie cognitive et les points d&rsquo;acupuncture.
         </p>
