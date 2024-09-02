@@ -5,6 +5,7 @@ import { Newsletter } from "./components/Newsletter/Newsletter"
 import Ebook from "./components/E-book/E-book"
 import { Metadata } from "next"
 import EFT from "./components/EFT/EFT"
+import TherapieHolistique from "./components/TherapieHolistique/TherapieHolistique"
 
 export const metadata: Metadata = {
   title: "Accueil - Elisabeth Coach Holistique",
@@ -32,7 +33,8 @@ export default function Accueil() {
     <>
       <FirstAccueil />
       <Accompagnement />
-      <EFT/>
+      <EFT />
+      <TherapieHolistique />
       <UnPeuDeMoi />
       <Ebook />
       <Newsletter />

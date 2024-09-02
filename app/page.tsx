@@ -6,24 +6,6 @@ export default function Home() {
 
     <div className="flex flex-col gap-20">
       <Accueil />
-      <section className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-primary">Introduction à la Thérapie Holistique</h2>
-        <h3 className="text-xl font-bold">Une Approche Globale pour le Bonheur</h3>
-        <p>
-          La thérapie holistique vise à améliorer la qualité de vie en prenant en compte tous les aspects de l&apos;individu. En se concentrant sur le bien-être physique, mental et émotionnel, cette approche permet de retrouver un équilibre harmonieux. Les sessions aident les individus à mieux comprendre leurs aspirations et à trouver des solutions durables pour améliorer leur quotidien. Grâce à des techniques de relaxation et de <a href="https://www.helsana.ch/fr/blog/psyche/pleine-conscience/meditation.html" target="_blank" rel="noopener noreferrer">méditation</a>, cette méthode réduit le stress et favorise un état de bien-être général.
-        </p>
-      </section>
-
-      <section className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-primary">Les Bienfaits de la Médecine Holistique</h2>
-        <h3 className="text-xl font-bold">Une Approche Personnalisée pour Chaque Individu</h3>
-        <p>
-          L&apos;un des principaux objectifs de la <a href="https://fr.wikipedia.org/wiki/Th%C3%A9rapie_holistique" target="_blank" rel="noopener noreferrer">thérapie holistique</a> est de promouvoir la santé et le bonheur. En travaillant avec un thérapeute, les individus apprennent à mieux gérer leur énergie et à prendre soin de leur corps. Les sessions incluent des conseils sur la nutrition, l&apos;exercice physique et des pratiques de pleine conscience pour éviter un état de santé optimal. En se concentrant sur la confiance en soi et la gestion des émotions, cette méthode renforce la résilience face aux défis du quotidien.
-        </p>
-        <p>
-          La médecine holistique propose une approche personnalisée pour chaque individu, en tenant compte de ses aspirations et objectifs. Que ce soit pour améliorer la qualité de vie, retrouver un équilibre intérieur ou atteindre des objectifs professionnels, cette méthode offre des outils adaptés. En intégrant des pratiques telles que la <a href="https://www.helsana.ch/fr/blog/psyche/pleine-conscience/meditation.html" target="_blank" rel="noopener noreferrer">méditation</a>, la relaxation et la pleine conscience, cette méthode permet de vivre de manière plus consciente et épanouie. Les bienfaits de la médecine holistique se manifestent dans le bien-être physique, une meilleure gestion du stress et une plus grande harmonie intérieure. Cette approche permet de maintenir un équilibre durable et de favoriser le bien-être au quotidien.
-        </p>
-      </section>
     </div>
   );
 }

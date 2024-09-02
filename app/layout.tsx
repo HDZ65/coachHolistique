@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
   title: "Elisabeth Coach Holistique - Coaching de Vie et Bien-être",
   description: "Découvrez les services de coaching holistique d'Elisabeth pour améliorer votre bien-être physique, mental et émotionnel. Programmes personnalisés et conseils professionnels.",
-  keywords: ["coaching holistique", "bien-être", "développement personnel", "vie", "Elisabeth Coach", "santé mentale", "santé physique", "programmes","corps","émotion","mental","relaxation","état","soin","étape", "médecine"],
+  keywords: ["coaching holistique", "bien-être", "développement personnel", "vie", "Elisabeth Coach", "santé mentale", "santé physique", "programmes","corps","émotion","mental","relaxation","état","soin","étape", "médecine", "qualité", "esprit", "méditation", "thérapeute"],
   authors: [{ name: "Elisabeth Coach Holistique" }],
 
   robots: {
