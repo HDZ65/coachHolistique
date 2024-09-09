@@ -1,36 +1,50 @@
-import * as React from "react";
+// Composant CardCoaching 
+
 import Image, { StaticImageData } from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { BsInfo } from "react-icons/bs";
-import Link from "next/link";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface CardCoachingProps {
-  image?: StaticImageData | string | undefined;
+  image?: StaticImageData | string;
   titre: string;
   description: string;
-  children?: React.ReactNode; // Added this line
+  children?: React.ReactNode;
 }
 
-function CardCoaching({ image, titre, description, children }: CardCoachingProps) {
+function CardCoaching({
+  image,
+  titre,
+  description,
+  children,
+}: CardCoachingProps): JSX.Element {
   return (
-    <Card className="relative w-full max-w-[450px] flex flex-col   min-h-full">
+    <Card 
+      className="relative w-full max-w-[450px] flex flex-col min-h-full"
+      itemScope 
+      itemType="http://schema.org/Service"
+    >
       <CardHeader className="p-0">
-        <CardTitle className="">
-          {image && <Image src={image} alt={titre} width={500} height={500} className="aspect-video object-cover w-full h-full rounded-t-md" />}
-        </CardTitle>
+        {image && (
+          <Image
+            src={image}
+            alt={titre}
+            width={500}
+            height={500}
+            className="aspect-video object-cover w-full h-full rounded-t-md"
+            loading="lazy"
+          />
+        )}
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent className="flex-grow p-4">
+        <CardTitle className="text-2xl font-bold mb-2" itemProp="name">
+          {titre}
+        </CardTitle>
+        <CardDescription 
+          className="text-foreground mb-4" 
+          itemProp="description"
+        >
+          {description}
+        </CardDescription>
         {children}
-        <CardTitle className="text-2xl">{titre}</CardTitle>
-        <CardDescription className="text-foreground">{description}</CardDescription>
       </CardContent>
     </Card>
   );

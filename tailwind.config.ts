@@ -20,7 +20,7 @@ const config = {
     },
     extend: {
       width: {
-        'short-divider': '25%', // Ajustez cette valeur selon vos besoins
+        'short-divider': '25%',
       },
 
       fontFamily: {

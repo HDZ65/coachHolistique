@@ -1,3 +1,6 @@
+// PAGE D'ACCUEIL 
+
+// Import des composants
 import Accompagnement from "./components/Accompagnement/Accompagnement"
 import UnPeuDeMoi from "./components/UnPeuDeMoi/UnPeuDeMoi"
 import FirstAccueil from "./components/FirstAccueil/FirstAccueil"
@@ -7,6 +10,7 @@ import { Metadata } from "next"
 import EFT from "./components/EFT/EFT"
 import TherapieHolistique from "./components/TherapieHolistique/TherapieHolistique"
 
+// metaData pour le SEO
 export const metadata: Metadata = {
   title: "Accueil - Elisabeth Coach Holistique",
   description: "Bienvenue sur la page d'accueil d'Elisabeth Coach Holistique. Découvrez nos services de coaching pour améliorer votre bien-être physique, mental et émotionnel.",
@@ -28,6 +32,7 @@ export const metadata: Metadata = {
   }
 };
 
+// Retourne la page d'accueil
 export default function Accueil() {
   return (
     <>

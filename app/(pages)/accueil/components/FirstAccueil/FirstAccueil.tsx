@@ -1,4 +1,4 @@
-'use client';
+// Première section de l'accueil
 
 import { fontEphesis, fontMontaga } from './../../../../fonts';
 import React from 'react';
@@ -7,7 +7,7 @@ import dune from './../../../../../public/dune.jpg';
 import ButtonContact from '@/app/components/ButtonContact/ButtonContact';
 import { ButtonRendezVous } from './../../../../components/ButtonRendezVous/ButtonRendezVous';
 
-const FirstAccueil = React.memo(function FirstAccueil() {
+function FirstAccueil() {
     return (
         <section className="relative flex gap-6 m-auto text-secondary mt-10">
             <div 
@@ -44,6 +44,6 @@ const FirstAccueil = React.memo(function FirstAccueil() {
             </article>
         </section>
     );
-});
+}
 
 export default FirstAccueil;

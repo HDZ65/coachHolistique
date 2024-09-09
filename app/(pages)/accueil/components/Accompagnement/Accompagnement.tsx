@@ -5,16 +5,17 @@ import Link from "next/link";
 
 const Accompagnement = React.memo(function Accompagnement() {
   return (
-    <section className='flex flex-col m-auto gap-10 text-center maxW-7xl items-center justify-center  text-foor-1000'>
-      <article className="flex flex-col items-center  gap-4">
+    <section className='flex flex-col m-auto gap-10 text-center max-w-7xl items-center justify-center text-foor-1000'>
+      <article className="flex flex-col items-center gap-4">
         <h2 className={`text-4xl  text-secondary`}>Accompagnement Holistique</h2>
-        <Link href="/coaching" className='textLg text-muted hover:text-primary underline'>
+        <Link href="/coaching" className='text-lg text-muted hover:text-primary underline'>
           Qu&rsquo;est ce que la thérapie holistique ?</Link>
         <p className='text-center  text-foreground md:w-4/5 mx-auto'>
           Embarquez pour un <strong>accompagnement</strong> dans votre voyage de <strong>coaching holistique</strong> profond. Ensemble, nous dénouerons les nœuds qui entravent votre <strong>confiance en soi</strong> et aborderons les <strong>défis quotidiens</strong> qui vous empêchent d&rsquo;atteindre vos <strong>objectifs</strong>.
         </p>
       </article>
-      <article className="flex max-md:items-center max-md:flex-col gap-6 justify-around  w-full">
+
+      <article className="flex max-md:items-center max-md:flex-col gap-6 justify-around w-full">
         <CardCoaching
           titre="Découverte et Évaluation"
           description="Programmez un appel initial pour évaluer vos besoins et définir les objectifs de votre parcours de coaching personnalisé. (durée 30min )"
@@ -25,6 +26,7 @@ const Accompagnement = React.memo(function Accompagnement() {
             <path d="M34.9987 35.0006L27.832 27.834" stroke="#AD8181" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </CardCoaching>
+
         <CardCoaching
           titre="Sessions Hebdomadaires"
           description="Participez à des séances de coaching hebdomadaires via visioconférence, chaque session d'une durée d'une heure, pour un suivi régulier et approfondi pendant 1 mois."
@@ -35,6 +37,7 @@ const Accompagnement = React.memo(function Accompagnement() {
             <path d="M11.668 35.0003L20.0013 26.667L28.3346 35.0003" stroke="#AD8581" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </CardCoaching>
+
         <CardCoaching
           titre="Accompagnement Continu"
           description="Bénéficiez d'un suivi continu avec des échanges réguliers par messages via WhatsApp pour discuter de vos progrès, célébrer vos réussites et répondre à vos questions spécifiques."
@@ -47,6 +50,7 @@ const Accompagnement = React.memo(function Accompagnement() {
           </svg>
         </CardCoaching>
       </article>
+
     </section>
   );
 });
